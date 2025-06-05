@@ -1,93 +1,127 @@
 // src/sections/Contact.jsx
-import {MailIcon, LinkedinIcon, GithubIcon} from "lucide-react";
+import {Mail, Linkedin, Github, Send} from "lucide-react";
+import {motion} from "framer-motion";
 
+/* ---- social links ---------------------------------------------------- */
+const socials = [
+    {icon: Mail, label: "Email", url: "mailto:ryan@example.com"},
+    {icon: Linkedin, label: "LinkedIn", url: "https://linkedin.com/in/ryan-m"},
+    {icon: Github, label: "GitHub", url: "https://github.com/ryan"},
+];
+
+/* ---- component ------------------------------------------------------- */
 export default function Contact() {
     return (
-        <section id="contact" className="bg-gray-50 py-24 dark:bg-slate-900">
+        <section id="contact" className="bg-gray-50 py-24 dark:bg-slate-700">
             <div className="mx-auto max-w-lg px-4 text-center">
-                <h2 className="mb-4 text-3xl font-bold tracking-tight">Let’s Talk</h2>
-                <p className="mb-10 text-gray-700 dark:text-gray-300">
-                    Whether you have an opportunity that fits my skill set or just want to
-                    chat about deep-RL in optical networks, drop me a line.
-                </p>
+                {/* title */}
+                <motion.h2
+                    initial={{opacity: 0, y: 40}}
+                    whileInView={{opacity: 1, y: 0}}
+                    viewport={{once: true, amount: 0.3}}
+                    transition={{duration: 0.4}}
+                    className="mb-4 text-4xl font-extrabold tracking-tight
+                     text-gray-900 dark:text-gray-50"
+                >
+                    Let’s Connect
+                </motion.h2>
 
-                {/* ------ quick links row ------ */}
-                <div className="mb-12 flex justify-center gap-6">
-                    {/* email */}
-                    <a
-                        href="mailto:ryan@example.com"
-                        className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-200"
-                        aria-label="Email"
-                    >
-                        <MailIcon size={28}/>
-                    </a>
-                    {/* LinkedIn */}
-                    <a
-                        href="https://linkedin.com/in/ryan-m"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-200"
-                        aria-label="LinkedIn"
-                    >
-                        <LinkedinIcon size={28}/>
-                    </a>
-                    {/* GitHub */}
-                    <a
-                        href="https://github.com/ryan"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-200"
-                        aria-label="GitHub"
-                    >
-                        <GithubIcon size={28}/>
-                    </a>
-                </div>
+                {/* subtitle */}
+                <motion.p
+                    initial={{opacity: 0, y: 40}}
+                    whileInView={{opacity: 1, y: 0}}
+                    viewport={{once: true, amount: 0.3}}
+                    transition={{duration: 0.4, delay: 0.1}}
+                    className="mx-auto mb-10 max-w-md text-lg leading-relaxed
+                     text-gray-700 dark:text-gray-300"
+                >
+                    I love meeting curious people—whether it’s about optical networks,
+                    deep RL, or the perfect espresso recipe. Drop a note and I’ll reply
+                    within a day.
+                </motion.p>
 
-                {/* ------ optional contact form ------ */}
-                <form
+                {/* social icons */}
+                <motion.div
+                    initial={{opacity: 0}}
+                    whileInView={{opacity: 1}}
+                    viewport={{once: true, amount: 0.3}}
+                    transition={{duration: 0.4, delay: 0.2}}
+                    className="mb-12 flex justify-center gap-8"
+                >
+                    {socials.map(({icon: Icon, label, url}) => (
+                        <a
+                            key={label}
+                            href={url}
+                            target={url.startsWith("http") ? "_blank" : undefined}
+                            rel="noopener noreferrer"
+                            aria-label={label}
+                            className="rounded-full p-3 shadow transition
+                         hover:scale-110 hover:bg-blue-600 hover:text-white
+                         bg-blue-600 text-white
+                         dark:bg-white dark:text-blue-600
+                         dark:hover:bg-blue-500 dark:hover:text-white"
+                        >
+                            <Icon size={28}/>
+                        </a>
+                    ))}
+                </motion.div>
+
+                {/* message form */}
+                <motion.form
+                    initial={{opacity: 0, y: 40}}
+                    whileInView={{opacity: 1, y: 0}}
+                    viewport={{once: true, amount: 0.3}}
+                    transition={{duration: 0.4, delay: 0.3}}
                     action="https://formspree.io/f/yourFormID"
                     method="POST"
-                    className="grid gap-4"
+                    className="grid gap-4 rounded-xl border border-gray-200 bg-white p-6
+                     shadow-md dark:border-slate-700 dark:bg-slate-800"
                 >
                     <input
                         type="text"
                         name="name"
                         placeholder="Your Name"
                         required
-                        className="rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm
-                       focus:border-blue-600 focus:outline-none dark:border-slate-700 dark:bg-slate-800"
+                        className="rounded-lg border border-gray-300 px-4 py-3 text-sm
+                       focus:border-blue-600 focus:outline-none
+                       dark:border-slate-600 dark:bg-slate-900 dark:text-gray-100"
                     />
                     <input
                         type="email"
                         name="email"
                         placeholder="you@example.com"
                         required
-                        className="rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm
-                       focus:border-blue-600 focus:outline-none dark:border-slate-700 dark:bg-slate-800"
+                        className="rounded-lg border border-gray-300 px-4 py-3 text-sm
+                       focus:border-blue-600 focus:outline-none
+                       dark:border-slate-600 dark:bg-slate-900 dark:text-gray-100"
                     />
                     <textarea
                         name="message"
                         rows="4"
                         placeholder="How can I help?"
                         required
-                        className="rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm
-                       focus:border-blue-600 focus:outline-none dark:border-slate-700 dark:bg-slate-800"
+                        className="rounded-lg border border-gray-300 px-4 py-3 text-sm
+                       focus:border-blue-600 focus:outline-none
+                       dark:border-slate-600 dark:bg-slate-900 dark:text-gray-100"
                     ></textarea>
 
-                    {/* anti-spam hidden honeypot */}
+                    {/* honeypot */}
                     <input type="text" name="_gotcha" className="hidden"/>
 
                     <button
                         type="submit"
-                        className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow
-                       hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors duration-200"
+                        className="flex items-center justify-center gap-2 rounded-lg
+                       bg-blue-600 px-6 py-3 font-semibold text-white shadow
+                       transition-colors duration-200 hover:bg-blue-700
+                       dark:bg-white dark:text-blue-600
+                       dark:hover:bg-blue-500 dark:hover:text-white"
                     >
+                        <Send size={18}/>
                         Send Message
                     </button>
-                </form>
+                </motion.form>
 
-                {/* success note (Formspree redirects by default) */}
-                <p className="mt-4 text-xs text-gray-500">
+                <p className="mt-4 text-xs text-gray-500 dark:text-gray-400">
                     Powered by{" "}
                     <a
                         href="https://formspree.io"
@@ -102,3 +136,4 @@ export default function Contact() {
         </section>
     );
 }
+
