@@ -1,4 +1,5 @@
 import {ChevronDown} from "lucide-react";
+import {motion} from "framer-motion";
 
 // src/sections/Hero.jsx
 export default function Hero() {
@@ -15,7 +16,12 @@ export default function Hero() {
             />
 
             {/* content */}
-            <div className="text-center">
+            <motion.div
+                initial={{opacity: 0, y: 40}}
+                animate={{opacity: 1, y: 0}}
+                transition={{duration: 0.6}}
+                className="text-center"
+            >
                 <h1 className="mb-6 text-6xl md:text-7xl font-extrabold leading-tight tracking-tight">
                     Hi, I’m <span className="text-blue-600">Ryan</span>
                 </h1>
@@ -41,7 +47,7 @@ export default function Hero() {
                         Download CV
                     </a>
                 </div>
-            </div>
+            </motion.div>
 
             {/* small down-arrow hint */}
             <a
