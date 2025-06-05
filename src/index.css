@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    /* make ALL in-page anchor jumps smooth */
+    scroll-behavior: smooth;
+}
+
 @keyframes blob {
     0%, 100% {
         transform: scale(1) translate(0, 0);
@@ -17,4 +22,11 @@
 
 .animate-blob {
     animation: blob 20s infinite linear;
+}
+
+@layer base {
+    /* Light default: Tailwind’s gray-900. Dark default: gray-100 */
+    body {
+        @apply text-gray-900 dark:text-gray-100;
+    }
 }

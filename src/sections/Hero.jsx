@@ -8,7 +8,7 @@ export default function Hero() {
             {/* animated background blob */}
             <div
                 className="absolute inset-0 -z-10 animate-blob bg-gradient-to-br
-                   from-blue-400 via-fuchsia-500 to-amber-400
+                   from-blue-600 via-indigo-600 to-cyan-500
                    opacity-30 blur-2xl"
             />
 
