@@ -82,7 +82,7 @@ export default function Experience() {
     return (
         <section
             id="experience"
-            className="bg-white py-24 dark:bg-slate-800"
+            className="bg-white py-24 dark:bg-slate-700"
         >
             <div className="mx-auto max-w-4xl px-4">
                 <h2 className="mb-12 text-4xl font-extrabold tracking-tight
