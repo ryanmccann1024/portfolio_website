@@ -1,75 +1,139 @@
 // src/sections/Experience.jsx
-import {BriefcaseIcon} from "lucide-react";
+import {motion} from "framer-motion";
+import {
+    Briefcase,
+    Code2,
+    GraduationCap,
+    School,
+} from "lucide-react";
 
-const experiences = [
+/* ─── TIMELINE DATA ───────────────────────────────────── */
+const timeline = [
     {
-        role: "Research Engineer (Optical Networks)",
-        company: "OpenWave Labs",
-        period: "2023 – Present",
+        role: "Lead Developer • Optical Simulator v6",
+        org: "NSF POSE Submission",
+        period: "2024 – Present",
+        icon: Code2,
         bullets: [
-            "Designed RL-based disaster-aware routing (↓35 % blocking prob.)",
-            "Led refactor of 20k-LOC simulator → modular plugin architecture",
-            "Mentored 2 interns; project accepted to IEEE JSAC ’25",
+            "Managing 5-person team; targeting $300 k POSE grant.",
+            "Modular rewrite with Podman HPC CI (summer ’25 release).",
         ],
     },
     {
-        role: "Graduate Research Assistant",
-        company: "University of XYZ",
-        period: "2021 – 2023",
+        role: "AI Researcher",
+        org: "UMass Lowell",
+        period: "2022 – Present",
+        icon: Briefcase,
         bullets: [
-            "Published 3 papers on SD-EON resiliency & deep RL",
-            "Optimised PPO hyperparams via Optuna; cut training time 40 %",
+            "Integrated RL into optical simulator → 25 % fewer blocked requests.",
+            "Journal paper on deep-RL routing (submit Jun ’25).",
         ],
     },
     {
-        role: "Freelance Full-Stack Developer",
-        company: "Various Clients",
-        period: "2019 – 2021",
+        role: "Ph.D. Scholar (full fellowship)",
+        org: "UMass Lowell",
+        period: "2024 – Present",
+        icon: GraduationCap,
         bullets: [
-            "Delivered 10+ React dashboards with Flask/FastAPI back-ends",
-            "Automated CI/CD on GitHub Actions & Netlify",
+            "Full academic scholarship (combined M.S./Ph.D.).",
+            "Focus: disaster-aware deep RL for elastic optical networks.",
+        ],
+    },
+    {
+        role: "M.S. ECE (Thesis Defended)",
+        org: "UMass Lowell",
+        period: "2022 – 2023",
+        icon: GraduationCap,
+        bullets: [
+            "Thesis: PPO-based disaster routing → 35 % resilience boost.",
+            "Graduated with High Distinction.",
+        ],
+    },
+    {
+        role: "Firmware Validation Intern",
+        org: "Zebra Technologies",
+        period: "2022",
+        icon: Briefcase,
+        bullets: [
+            "Built 15 + Jenkins suites — 150 + build failures prevented.",
+            "Python Wi-Fi 6 parser slashed cert cycle time.",
+        ],
+    },
+    {
+        role: "B.S. ECE (magna cum laude)",
+        org: "UMass Lowell",
+        period: "2018 – 2022",
+        icon: School,
+        bullets: [
+            "John & Abigail Adams Scholarship — full tuition.",
+            "Capstone: SDN-driven metro-core optical topology.",
         ],
     },
 ];
 
+/* ─── ANIMATION VARIANT ───────────────────────────────── */
+const variant = {
+    hidden: {opacity: 0, y: 40},
+    show: {opacity: 1, y: 0, transition: {ease: "easeOut", duration: 0.4}},
+};
+
+/* ─── COMPONENT ───────────────────────────────────────── */
 export default function Experience() {
     return (
-        <section id="experience" className="mx-auto max-w-4xl px-4 py-24">
-            <h2 className="mb-12 text-3xl font-bold tracking-tight">Experience</h2>
+        <section
+            id="experience"
+            className="bg-white py-24 dark:bg-slate-800"
+        >
+            <div className="mx-auto max-w-4xl px-4">
+                <h2 className="mb-12 text-4xl font-extrabold tracking-tight
+                       text-gray-900 dark:text-gray-50">
+                    Experience & Education
+                </h2>
 
-            <ol className="relative border-l border-gray-300 dark:border-slate-600">
-                {experiences.map(({role, company, period, bullets}, idx) => (
-                    <li key={idx} className="mb-12 ml-4">
-                        {/* timeline dot */}
-                        <span
-                            className="absolute -left-2.5 flex h-5 w-5 items-center justify-center
-                         rounded-full bg-blue-600 ring-4 ring-white dark:ring-slate-900"
+                <ol className="relative border-l border-gray-300 dark:border-slate-600">
+                    {timeline.map(({role, org, period, bullets, icon: Icon}, i) => (
+                        <motion.li
+                            key={i}
+                            variants={variant}
+                            initial="hidden"
+                            whileInView="show"
+                            viewport={{once: true, amount: 0.3}}
+                            className="mb-12 ml-6"
                         >
-              <BriefcaseIcon size={12} color="white"/>
-            </span>
-
-                        {/* header line */}
-                        <div className="mb-1 flex flex-wrap items-baseline gap-x-2">
-                            <h3 className="text-lg font-semibold">{role}</h3>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                @{company}
+                            {/* dot + icon */}
+                            <span
+                                className="absolute -left-2.5 flex h-6 w-6 items-center justify-center
+                           rounded-full bg-blue-600 ring-2 ring-white dark:ring-white"
+                            >
+                <Icon size={12} className="text-white"/>
               </span>
-                        </div>
-                        <time className="mb-3 block text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                            {period}
-                        </time>
 
-                        {/* bullet list */}
-                        <ul className="mb-4 list-disc pl-5 text-sm text-gray-700 dark:text-gray-300">
-                            {bullets.map((b, i) => (
-                                <li key={i} className="mb-1">
-                                    {b}
-                                </li>
-                            ))}
-                        </ul>
-                    </li>
-                ))}
-            </ol>
+                            {/* header */}
+                            <div className="mb-1 flex flex-wrap items-baseline gap-x-2">
+                                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                    {role}
+                                </h3>
+                                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  @{org}
+                </span>
+                            </div>
+
+                            <time className="mb-3 block text-xs font-semibold uppercase tracking-wide
+                               text-gray-600 dark:text-gray-400">
+                                {period}
+                            </time>
+
+                            {/* bullets */}
+                            <ul className="list-disc pl-5 text-base font-medium
+                             text-gray-800 dark:text-gray-200">
+                                {bullets.map((b, j) => (
+                                    <li key={j} className="mb-1">{b}</li>
+                                ))}
+                            </ul>
+                        </motion.li>
+                    ))}
+                </ol>
+            </div>
         </section>
     );
 }
