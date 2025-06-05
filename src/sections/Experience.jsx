@@ -81,7 +81,7 @@ const variant = {
 export default function Experience() {
     return (
         <section
-            id="experience"
+            id="experience & education"
             className="bg-white py-24 dark:bg-slate-700"
         >
             <div className="mx-auto max-w-4xl px-4">

@@ -33,7 +33,7 @@ export default function Navbar() {
 
                 {/* ------ Desktop links ------ */}
                 <ul className="hidden gap-10 text-sm font-medium md:flex">
-                    {["About", "Projects", "Experience", "Skills", "Contact"].map(
+                    {["About", "Projects", "Experience & Education", "Skills", "Contact"].map(
                         (item) => (
                             <li key={item}>
                                 <a
