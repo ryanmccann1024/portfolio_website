@@ -38,7 +38,7 @@ export default function Navbar() {
                             <li key={item}>
                                 <a
                                     href={`#${item.toLowerCase()}`}
-                                    className="hover:text-blue-600 dark:hover:text-blue-400"
+                                    className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
                                 >
                                     {item}
                                 </a>
@@ -49,7 +49,7 @@ export default function Navbar() {
                         <a
                             href="/RyanM_Resume.pdf"
                             target="_blank"
-                            className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                            className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors duration-200"
                         >
                             Download CV
                         </a>
@@ -60,7 +60,7 @@ export default function Navbar() {
                 <button
                     aria-label="Toggle dark mode"
                     onClick={toggleTheme}
-                    className="rounded-full p-2 transition hover:bg-gray-200 dark:hover:bg-slate-700 md:ml-4"
+                    className="rounded-full p-2 hover:bg-gray-200 dark:hover:bg-slate-700 md:ml-4 transition-colors duration-200"
                 >
                     {dark ? <Sun size={18}/> : <Moon size={18}/>}
                 </button>

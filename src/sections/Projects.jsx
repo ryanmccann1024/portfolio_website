@@ -73,8 +73,8 @@ export default function Projects() {
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 aria-label="GitHub repo"
-                                                className="text-gray-600 transition hover:text-blue-600
-                                   dark:text-gray-300 dark:hover:text-blue-400"
+                                                className="text-gray-600 hover:text-blue-600
+                                   dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-200"
                                             >
                                                 <GithubIcon size={20}/>
                                             </a>
@@ -85,8 +85,8 @@ export default function Projects() {
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 aria-label="Live demo"
-                                                className="text-gray-600 transition hover:text-blue-600
-                                   dark:text-gray-300 dark:hover:text-blue-400"
+                                                className="text-gray-600 hover:text-blue-600
+                                   dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-200"
                                             >
                                                 <ExternalLinkIcon size={20}/>
                                             </a>

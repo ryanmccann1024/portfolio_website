@@ -16,7 +16,7 @@ export default function Contact() {
                     {/* email */}
                     <a
                         href="mailto:ryan@example.com"
-                        className="text-gray-600 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+                        className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-200"
                         aria-label="Email"
                     >
                         <MailIcon size={28}/>
@@ -26,7 +26,7 @@ export default function Contact() {
                         href="https://linkedin.com/in/ryan-m"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-600 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+                        className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-200"
                         aria-label="LinkedIn"
                     >
                         <LinkedinIcon size={28}/>
@@ -36,7 +36,7 @@ export default function Contact() {
                         href="https://github.com/ryan"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-600 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+                        className="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-200"
                         aria-label="GitHub"
                     >
                         <GithubIcon size={28}/>
@@ -80,7 +80,7 @@ export default function Contact() {
                     <button
                         type="submit"
                         className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow
-                       hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                       hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors duration-200"
                     >
                         Send Message
                     </button>
