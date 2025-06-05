@@ -1,3 +1,5 @@
+import {ChevronDown} from "lucide-react";
+
 // src/sections/Hero.jsx
 export default function Hero() {
     return (
@@ -14,10 +16,10 @@ export default function Hero() {
 
             {/* content */}
             <div className="text-center">
-                <h1 className="mb-6 text-5xl font-extrabold leading-tight tracking-tight md:text-6xl">
-                    Hi, I’m <span className="text-blue-600 dark:text-blue-400">Ryan</span>
+                <h1 className="mb-6 text-6xl md:text-7xl font-extrabold leading-tight tracking-tight">
+                    Hi, I’m <span className="text-blue-600">Ryan</span>
                 </h1>
-                <p className="mx-auto mb-10 max-w-2xl text-lg text-gray-700 dark:text-gray-300">
+                <p className="mx-auto mb-12 max-w-2xl text-xl md:text-2xl font-medium text-gray-700">
                     Python-savvy developer turning complex ideas into elegant web
                     experiences with React &amp; modern tooling.
                 </p>
@@ -26,14 +28,15 @@ export default function Hero() {
                 <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                     <a
                         href="#projects"
-                        className="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white shadow hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors duration-200"
+                        className="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white shadow hover:bg-blue-700
+                        transition-colors duration-200"
                     >
                         See My Work
                     </a>
                     <a
                         href="/RyanM_Resume.pdf"
                         target="_blank"
-                        className="rounded-lg border border-blue-600 px-8 py-3 font-semibold text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-slate-800 transition-colors duration-200"
+                        className="rounded-lg border border-blue-600 px-8 py-3 font-semibold text-blue-600 hover:bg-blue-50 transition-colors duration-200"
                     >
                         Download CV
                     </a>
@@ -43,9 +46,10 @@ export default function Hero() {
             {/* small down-arrow hint */}
             <a
                 href="#about"
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 text-gray-500 hover:text-blue-600 transition-colors duration-200"
+                className="absolute bottom-10 left-1/2 -translate-x-1/2 text-gray-500 transition
+                         hover:text-blue-600"
             >
-                ↓
+                <ChevronDown size={36} className="animate-bounce"/>
             </a>
         </section>
     );
