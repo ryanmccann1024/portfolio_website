@@ -55,10 +55,10 @@ export default function Navbar() {
                     )}
                     <li>
                         <a
-                            href="/RyanM_Resume.pdf"
-                            target="_blank"
+                            href="../assets/pdfs/Ryan_McCann_Resume_v4.pdf"
+                            download="Ryan_McCann_Resume.pdf"
                             className="rounded-lg bg-blue-600 px-5 py-2.5 font-semibold text-white shadow
-                         transition-colors duration-200 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                                        transition-colors duration-200 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
                         >
                             Download CV
                         </a>

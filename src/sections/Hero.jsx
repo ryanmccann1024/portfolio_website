@@ -40,7 +40,8 @@ export default function Hero() {
                         See My Work
                     </a>
                     <a
-                        href="/RyanM_Resume.pdf"
+                        href="../assets/pdfs/Ryan_McCann_Resume_v4.pdf"
+                        download="Ryan_McCann_Resume.pdf"
                         target="_blank"
                         className="rounded-lg border border-blue-600 px-8 py-3 font-semibold text-blue-600 hover:bg-blue-50 transition-colors duration-200"
                     >
