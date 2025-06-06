@@ -35,9 +35,8 @@ export default function Contact() {
                     className="mx-auto mb-10 max-w-md text-lg leading-relaxed
                      text-gray-700 dark:text-gray-300"
                 >
-                    I love meeting curious people—whether it’s about optical networks,
-                    deep RL, or the perfect espresso recipe. Drop a note and I’ll reply
-                    within a day.
+                    I love meeting curious people, whether it’s about optical networks,
+                    AI, or the perfect espresso recipe.
                 </motion.p>
 
                 {/* social icons */}
