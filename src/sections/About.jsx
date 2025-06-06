@@ -12,33 +12,33 @@ import {
 const facts = [
     {
         icon: Award,
-        label: "Full Fellow­ship",
-        detail: "M.S. & Ph.D. fully funded",
+        label: "Full Fellowship",
+        detail: "M.S. + Ph.D. funded with stipend",
     },
     {
         icon: Briefcase,
-        label: "5+ Years",
-        detail: "Hands-on coding & research",
+        label: "Team Lead",
+        detail: "5 devs • OSS simulator (FUSION)",
     },
     {
         icon: ScrollText,
-        label: "3 Publications",
-        detail: "IEEE & Elsevier Optical Net.",
+        label: "3 IEEE Papers",
+        detail: "Journal in progress",
     },
     {
         icon: Globe,
         label: "Spanish C1",
-        detail: "Self-taught, work-ready",
+        detail: "Presented research in Colombia",
     },
     {
         icon: Users,
-        label: "Team Lead",
-        detail: "5 devs • OSS simulator v6",
+        label: "HPC Collab",
+        detail: "Podman GPU extensions",
     },
     {
         icon: Zap,
-        label: "35 % Boost",
-        detail: "Disaster RL resilience gain",
+        label: "25% Gain",
+        detail: "AI enhanced optical network routing",
     },
 ];
 
@@ -66,12 +66,18 @@ export default function About() {
                     transition={{duration: 0.4, delay: 0.1}}
                     className="mb-12 text-lg leading-relaxed text-gray-800 dark:text-gray-200"
                 >
-                    I’m a Python-first researcher who turns cutting-edge reinforcement-learning
-                    ideas into production-ready optical-network tools. I lead the open-source
-                    <em>Optical Simulator v6</em> project, collaborate with the Podman HPC team,
-                    and hold a full fellowship to pursue combined M.S./Ph.D. studies at UMass
-                    Lowell. When I’m not coding, I sharpen my Spanish (C1) and French on Duolingo,
-                    or binge MIT & Berkeley open courses to stay ahead of the curve.
+                    I'm a Python-first researcher building interpretable RL systems for disaster-resilient optical
+                    networks.
+                    At UMass Lowell, I lead the development of <em>FUSION</em>, an open-source optical network simulator
+                    currently
+                    under NSF POSE review, and mentor a team of developers integrating cutting-edge SDN and AI features.
+                    I collaborate with Red Hat’s Podman team to scale container tooling for HPC environments and
+                    routinely
+                    push open-source contributions across academia and industry. Backed by a full fellowship for
+                    M.S./Ph.D. studies,
+                    I publish at IEEE conferences, teach engineering students Python best practices, and stay sharp by
+                    studying MIT
+                    & Stanford AI courses online. When not coding, I'm likely studying languages or reading.
                 </motion.p>
 
                 {/* quick-facts grid */}
