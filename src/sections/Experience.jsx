@@ -20,7 +20,7 @@ const experience = [
             "Published research at 3 international IEEE conferences (200+ attendees).",
             "Preparing journal submission on interpretable deep RL for optical routing (IEEE, Summer 2025).",
             "Attended and presented at IEEE Latin American Conference on Communications (Colombia) where I networked " +
-            "with professionals only in Spanish."
+            "with professionals in Spanish only."
         ]
     },
     {
@@ -30,8 +30,8 @@ const experience = [
         icon: Briefcase,
         bullets: [
             "Designed and deployed automated firmware validation in Jenkins; reduced build failures by over 150 instances.",
-            "Created a Python-based API parser to streamline Wi-Fi 6 compliance testing.",
-            "Presented technical proposals directly to Chief Product Officer as part of a company innovation challenge."
+            "Created a Python-based API parser to streamline Wi-Fi 6 compliance testing in under 3 months.",
+            "Presented technical proposals directly to the Chief Product Officer as part of a company innovation challenge."
         ]
     },
     {
@@ -44,16 +44,6 @@ const experience = [
             "Integrated MongoDB to reduce data pipeline latency across production systems."
         ]
     },
-    {
-        title: "Founder, Open Source Club",
-        org: "UMass Lowell",
-        period: "2021 – 2022",
-        icon: Code2,
-        bullets: [
-            "Founded UML’s first Open Source Club; organized inaugural kickoff event in partnership with Red Hat.",
-            "Project featured in UML's official engineering magazine."
-        ]
-    }
 ];
 
 const education = [
@@ -64,9 +54,12 @@ const education = [
         icon: GraduationCap,
         bullets: [
             "Full fellowship recipient (covers M.S. + Ph.D. with stipend and benefits).",
-            "Passed Ph.D. qualifier: Survey on RL applications for failure-aware optical networking.",
-            "Focus: disaster-aware deep reinforcement learning for elastic optical networks.",
-            "Currently studying Stanford RL, Berkeley Deep RL, and MIT OCW courses on probability and linear algebra."
+            "Passed Ph.D. qualifier: Survey on reinforcement learning applications for failure-aware optical networking.",
+            "Research focus: disaster-aware reinforcement learning for elastic optical networks.",
+            "Proactively revisiting foundational topics through self-paced online courses, including Stanford RL, Berkeley Deep RL, and MIT OCW (probability & linear algebra), to deepen understanding beyond formal degree requirements.",
+            "Redesigned the Network Design course to integrate recent AI advances, including applications of ChatGPT and large language models.",
+            "Co-authored two papers published at IEEE-sanctioned conferences, including a FUSION presentation on RL-based optical networks.",
+            "Currently collaborating with faculty to design a new course on Python best practices and applied artificial intelligence for engineering students."
         ]
     },
     {
@@ -75,9 +68,21 @@ const education = [
         period: "2022 – 2023",
         icon: GraduationCap,
         bullets: [
-            "Successfully defended thesis: Q-learning-based routing strategies improved resilience significantly.",
-            "3.7 GPA; taught 200+ students core internet protocols across all five layers.",
-            "Hands-on projects with HTTP, DNS, OpenFlow, and performance evaluation."
+            "Successfully defended thesis: Q-learning-based routing strategies significantly improved network resilience.",
+            "3.7 GPA; taught 200+ students core Internet protocols across all five layers (as TA and guest lecturer).",
+            "Assisted in the successful publication of two research papers alongside faculty collaborators.",
+            <>
+                Founded the lab’s first{' '}
+                <a
+                    href="#projects"
+                    className="text-blue-600 underline"
+                >
+                    open-source optical network simulator
+                </a>{' '}
+                in Python, integrating AI-driven components and custom modeling tools.
+            </>,
+            "Pushed beyond degree requirements: fulfilled all Computer Engineering core courses while also taking advanced Computer Science electives to expand technical breadth.",
+            "Hands-on research and coursework with HTTP, DNS, OpenFlow, routing protocols, and network performance evaluation."
         ]
     },
     {
@@ -87,9 +92,49 @@ const education = [
         icon: School,
         bullets: [
             "3.9 GPA | Magna Cum Laude | Honors College | Top 12% (Tau Beta Pi inductee).",
-            "John & Abigail Adams Scholarship (8 semesters) + MA High Demand Scholarship (debt offset).",
-            "Capstone on creating a more friendly version of the Fedora operating system for students."
+            "Top 1% in Circuit Theory 1 Course (perfect score; class average 55–70).",
+            "John & Abigail Adams Scholarship (covered books for 4 years) + MA High Demand Scholarship (debt offset).",
+            <>
+                Founded UML’s first open-source club; hosted a{' '}
+                <a
+                    href="https://www.youtube.com/watch?v=215-9_kxJh4"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                >
+                    Red Hat kickoff
+                </a>{' '}
+                event focused on Fedora and open-source collaboration.
+            </>,
+            <>
+                Capstone: Built a student-friendly Fedora distribution; featured in{' '}
+                <a
+                    href="https://www.uml.edu/engineering/research/engineering-solutions/es-spring-summer-2022/ece-students-develop-friendly-fedora.aspx"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                >
+                    UML Engineering Magazine
+                </a>
+                .
+            </>,
+            "Founded Council on Food Quality; worked with Dean Kohl to improve campus dining; ran info systems at a local food pantry.",
+            <>
+                Completed graduate-level coursework during undergrad in{' '}
+                <strong>Software Engineering</strong> and{' '}
+                <strong>Verilog & VHDL Synthesis and Design</strong>. See full course list on{' '}
+                <a
+                    href="https://www.linkedin.com/in/ryanjmccann/details/courses/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                >
+                    LinkedIn
+                </a>
+                .
+            </>
         ]
+
     }
 ];
 
