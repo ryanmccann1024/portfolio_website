@@ -1,45 +1,48 @@
 // src/sections/Projects.jsx
 import {GithubIcon, ExternalLinkIcon, PlayCircle} from "lucide-react";
 import {motion} from "framer-motion";
+import fusionImg from "../assets/images/fusion.png";
+import podmanImg from "../assets/images/podman.png";
+import reactImg from "../assets/images/react.png";
 
 /* ── PROJECT DATA ───────────────────────────────────────── */
 const projects = [
     {
-        title: "Optical Simulator v6",
-        img: "/assets/sim6.png",
-        tech: ["Python", "React", "FastAPI", "Tailwind"],
+        title: "FUSION",
+        img: fusionImg,
+        tech: ["Optical Networks", "Python", "Bash", "Numpy", "Pandas", "PyTorch", "Gymnasium", "SLURM"],
         blurb:
-            "Next-gen elastic-optical network simulator; plug-in RL agents & live dashboards. Targeting $300 k NSF POSE grant.",
-        repo: "https://github.com/ryan/simulator-v6",
+            "Flexible Unified System for Intelligent Optical Networking (FUSION), a cutting-edge optical network " +
+            "simulator supporting high-performance computing, deep and reinforcement learning, and advanced SDN/EON " +
+            "features including cross-talk awareness and traffic grooming. Developed with formalized contribution " +
+            "standards, FUSION is under NSF POSE review for a $300K open-source grant.",
+        repo: "https://github.com/SDNNetSim/FUSION",
         demo: null,
     },
     {
         title: "Podman HPC Extensions",
-        img: "/assets/podman_hpc.png",
-        tech: ["Go", "Podman", "SLURM"],
+        img: podmanImg,
+        tech: ["Go", "Podman", "HPC", "Containers", "GPU", "CI/CD", "SquashFS", "fuse-overlayfs"],
         blurb:
-            "Collaborating with Red Hat to add GPU-aware container runtime for HPC clusters; CI parity with Docker.",
-        repo: "https://github.com/containers/podman",
+            "Working directly with the Podman team at Red Hat to extend containerization for HPC clusters, with a focus " +
+            "on GPU-aware execution, native squashed image support, and additional image store masking. Upcoming " +
+            "contributions will target enhanced CI parity with Docker and integration of performance-optimized storage " +
+            "for large-scale scientific workflows.",
+        repo: "https://github.com/NERSC/podman-hpc",
         demo: null,
     },
     {
-        title: "RL Traffic Visualizer",
-        img: "/assets/rlviz.png",
-        tech: ["TypeScript", "D3.js", "WebSockets"],
+        title: "Personal Portfolio (This Website)",
+        img: reactImg,
+        tech: ["React", "Vite", "Tailwind CSS", "Framer Motion", "Responsive Design", "ChatGPT"],
         blurb:
-            "Real-time React dashboard that explains PPO path choices with animated spectrum maps.",
-        repo: "https://github.com/ryan/rl-traffic-viz",
-        demo: "https://rlviz-demo.netlify.app",
-    },
-    {
-        title: "Portfolio Site (this)",
-        img: "/assets/portfolio.png",
-        tech: ["React", "Tailwind", "GitHub Actions"],
-        blurb:
-            "Built & deployed in < 24 h with GPT co-pilot; dark-mode, framer-motion, auto-deploy via Pages.",
-        repo: "https://github.com/ryan/portfolio_website",
-        demo: "https://ryan.github.io/portfolio_website/",
-    },
+            "Fully designed and developed this interactive, animated portfolio site from scratch in under 24 hours " +
+            "using React, Tailwind, and Framer Motion, with architectural assistance from ChatGPT. Built for " +
+            "performance, clarity, and recruiter impact, this site showcases technical depth and modern front-end " +
+            "best practices.",
+        repo: "https://github.com/ryanmccann1024/portfolio_website", // Replace with your actual repo link
+        demo: null, // Replace with your actual deployed URL
+    }
 ];
 
 /* ── CARD VARIANT ──────────────────────────────────────── */
