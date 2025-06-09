@@ -4,9 +4,9 @@ import {motion} from "framer-motion";
 
 /* ---- social links ---------------------------------------------------- */
 const socials = [
-    {icon: Mail, label: "Email", url: "mailto:ryan@example.com"},
-    {icon: Linkedin, label: "LinkedIn", url: "https://linkedin.com/in/ryan-m"},
-    {icon: Github, label: "GitHub", url: "https://github.com/ryan"},
+    {icon: Mail, label: "Email", url: "mailto:ryanjohnmccann@gmail.com"},
+    {icon: Linkedin, label: "LinkedIn", url: "https://www.linkedin.com/in/ryanjmccann/"},
+    {icon: Github, label: "GitHub", url: "https://github.com/ryanmccann1024"},
 ];
 
 /* ---- component ------------------------------------------------------- */
