@@ -55,7 +55,7 @@ export default function Navbar() {
                     )}
                     <li>
                         <a
-                            href="/public/pdfs/Ryan_McCann_Resume_v4.pdf"
+                            href="https://github.com/ryanmccann1024/portfolio_website/blob/main/public/pdfs/Ryan_McCann_Resume_v4.pdf"
                             download="Ryan_McCann_Resume.pdf"
                             className="rounded-lg bg-blue-600 px-5 py-2.5 font-semibold text-white shadow
                                         transition-colors duration-200 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
