@@ -111,7 +111,7 @@ const variant = {
 
 export default function ExperienceSection() {
     return (
-        <section id="experience-education" className="bg-white py-24 dark:bg-slate-700">
+        <section id="Experience & Education" className="bg-white py-24 dark:bg-slate-700">
             <div className="mx-auto max-w-4xl px-4">
 
                 {/* -------- EXPERIENCE -------- */}
