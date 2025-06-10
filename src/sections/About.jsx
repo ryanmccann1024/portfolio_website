@@ -1,47 +1,37 @@
-// src/sections/About.jsx
+// Revamped About section – tighter brand message + remote-readiness cues
+// Ryan McCann – June 2025
+
 import {motion} from "framer-motion";
 import {
     Award,
-    Briefcase,
+    Star,
     Globe,
-    Zap,
-    ScrollText,
     Users,
+    Zap,
+    Clock,
 } from "lucide-react";
 
+/* ── QUICK FACTS ───────────────────────────────────────── */
 const facts = [
     {
         icon: Award,
         label: "Full Fellowship",
-        detail: "M.S. + Ph.D. funded with stipend",
+        detail: "M.S. + Ph.D. fully funded (3.7 GPA)",
     },
-    {
-        icon: Briefcase,
-        label: "Team Lead",
-        detail: "5 devs • OSS simulator (FUSION)",
-    },
-    {
-        icon: ScrollText,
-        label: "3 IEEE Papers",
-        detail: "Journal in progress",
-    },
+
     {
         icon: Globe,
         label: "Spanish C1",
-        detail: "Presented research in Colombia",
-    },
-    {
-        icon: Users,
-        label: "HPC Collab",
-        detail: "Podman GPU extensions",
+        detail: "Papers presented in Colombia",
     },
     {
         icon: Zap,
-        label: "25% Gain",
-        detail: "AI enhanced optical network routing",
+        label: "25 % Faster",
+        detail: "RL‑routed optical networks",
     },
 ];
 
+/* ── ABOUT COMPONENT ───────────────────────────────────── */
 export default function About() {
     return (
         <section id="about" className="bg-white py-24 dark:bg-slate-700">
@@ -52,8 +42,7 @@ export default function About() {
                     whileInView={{opacity: 1, y: 0}}
                     viewport={{once: true, amount: 0.3}}
                     transition={{duration: 0.4}}
-                    className="mb-8 text-4xl font-extrabold tracking-tight
-                     text-gray-900 dark:text-gray-50"
+                    className="mb-8 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50"
                 >
                     About Me
                 </motion.h2>
@@ -66,18 +55,20 @@ export default function About() {
                     transition={{duration: 0.4, delay: 0.1}}
                     className="mb-12 text-lg leading-relaxed text-gray-800 dark:text-gray-200"
                 >
-                    I'm a Python-first researcher building interpretable RL systems for disaster-resilient optical
-                    networks.
-                    At UMass Lowell, I lead the development of <em>FUSION</em>, an open-source optical network simulator
-                    currently
-                    under NSF POSE review, and mentor a team of developers integrating cutting-edge SDN and AI features.
-                    I collaborate with Red Hat’s Podman team to scale container tooling for HPC environments and
-                    routinely
-                    push open-source contributions across academia and industry. Backed by a full fellowship for
-                    M.S./Ph.D. studies,
-                    I publish at IEEE conferences, teach engineering students Python best practices, and stay sharp by
-                    studying MIT
-                    & Stanford AI courses online. When not coding, I'm likely studying languages or reading.
+                    Hey, I’m <strong>Ryan McCann</strong>, a machine‑learning engineer who turns research prototypes
+                    into
+                    production‑grade, low‑latency systems. Backed by a full fellowship, I’m completing a Ph.D. in
+                    Computer
+                    Engineering while leading <em>FUSION</em>, an open‑source optical‑network RL simulator with 10
+                    GitHub stars
+                    and an NSF POSE grant under review. I ship code with globally distributed teams: from implementing
+                    Wi‑Fi
+                    6 test cycles at Zebra Technologies to prototyping GPU‑aware scheduling for Red Hat’s Podman HPC
+                    extensions. Fluent
+                    in Spanish (C1) and happiest when a CI pipeline green‑checks under 5 minutes, I publish at IEEE
+                    conferences, mentor junior devs, and believe in open knowledge. Off hours you’ll find me
+                    teaching third‑graders math, contributing to sustainability projects, or hiking Colombia's
+                    4,000‑footers.
                 </motion.p>
 
                 {/* quick-facts grid */}
@@ -91,18 +82,12 @@ export default function About() {
                     {facts.map(({icon: Icon, label, detail}) => (
                         <div
                             key={label}
-                            className="flex items-center gap-4 rounded-lg border border-gray-200
-                         bg-blue-50/40 px-4 py-5 transition
-                         hover:shadow-md dark:border-slate-700 dark:bg-slate-800/40"
+                            className="flex items-center gap-4 rounded-lg border border-gray-200 bg-blue-50/40 px-4 py-5 transition hover:shadow-md dark:border-slate-700 dark:bg-slate-800/40"
                         >
                             <Icon className="h-8 w-8 text-blue-600 dark:text-blue-400"/>
                             <div>
-                                <p className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                                    {label}
-                                </p>
-                                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    {detail}
-                                </p>
+                                <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{label}</p>
+                                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{detail}</p>
                             </div>
                         </div>
                     ))}

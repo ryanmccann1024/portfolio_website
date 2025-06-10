@@ -34,12 +34,12 @@ export default function Navbar() {
             <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
                 {/* ------ Logo / name ------ */}
                 <a href="#hero" className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50">
-                    Ryan M.
+                    Ryan McCann
                 </a>
 
                 {/* ------ Desktop links ------ */}
                 <ul className="hidden gap-10 text-sm font-medium md:flex">
-                    {["About", "Projects", "Experience & Education", "Skills", "Contact"].map(
+                    {["About", "Projects", "Experience & Education", "Contact"].map(
                         (item) => (
                             <li key={item}>
                                 <a
