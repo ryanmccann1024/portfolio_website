@@ -13,7 +13,7 @@ const experience = [
         icon: Briefcase,
         bullets: [
             "Integrated reinforcement learning into an open-source optical-network simulator, boosting dynamic efficiency by 25%.",
-            "Managed 80+ PRs across a 2,000-commit code base while coordinating a 5-person team via GitHub Actions & Notion.",
+            "Managed 80+ PRs across a 2,000-commit code base while coordinating a 5-person team via GitHub Actions & JIRA.",
             "Published 3 IEEE conference papers; journal submission on interpretable deep RL for optical routing in progress (Summer 2025).",
             "Presented research in Spanish at IEEE Latin-American Comms 2024, demonstrating bilingual remote-ready skills.",
         ],
@@ -77,7 +77,7 @@ const education = [
         bullets: [
             "3.9 GPA | Honors College | Tau Beta Pi & IEEE student-chapter member.",
             "Capstone: built student-friendly Fedora distro – featured in UML Engineering Magazine (Spring 2022).",
-            "Led Microprocessor Systems Design lab of 5 peers.",
+            "Led Microprocessor Systems Design lab of 2 peers.",
             "Founded Student Volunteers for Sustainability; secured Dean-level backing for campus food-quality initiative; promoted from food-pantry bagger to keyholder managing inventory at Central Food Ministry.",
             "Volunteered as math tutor for Project LEARN, mentoring 20 third-graders remotely during COVID-19.",
         ],
