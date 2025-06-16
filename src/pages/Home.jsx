@@ -7,7 +7,7 @@ import Contact from "../sections/Contact";
 
 export default function Home() {
     return (
-        <main>
+        <main className="pt-20 md:pt-0">
             <Hero/>
             <About/>
             <Projects/>
