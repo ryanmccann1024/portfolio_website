@@ -3,9 +3,9 @@
 
 import {GithubIcon, ExternalLinkIcon, PlayCircle} from "lucide-react";
 import {motion} from "framer-motion";
-import fusionImg from "../assets/images/fusion.png";
-import podmanImg from "../assets/images/podman.png";
-import reactImg from "../assets/images/react.png";
+import fusionImg from "../assets/projects/fusion.png";
+import podmanImg from "../assets/projects/podman.png";
+import reactImg from "../assets/projects/react.png";
 
 /* ── PROJECT DATA ───────────────────────────────────────── */
 const projects = [
