@@ -1,112 +1,103 @@
-// src/data/posts.js
 export const posts = [
     {
-        slug: "reinforcement-learning-optical-networks",
-        title: "How Reinforcement Learning Can Reroute an Optical Backbone in 50 ms",
-        date: "2025-05-30",
+        slug: "remote-phd-colombia-blog-launch",
+        title: "Remote PhD, Colombia, and Why I Built This Blog",
+        date: "2025-06-17",
         author: "Ryan McCann",
-        topics: ["Deep Learning", "Optical Networks"],
-        cover: "/assets/blog/rl-optical-cover.jpg",
+        topics: ["PhD Life", "Remote Work", "Personal Journey"],
+        cover: "/assets/blog/colombia-phd-cover.jpg", // save a banner photo here
         summary:
-            "Deep-RL isn’t just for Atari. Here’s how I cut blocking probability by 35 % on a 64-node elastic optical backbone—without adding new hardware.",
-        /* ------------------------------------------------------------------ */
-        /*  Everything below renders inside <article dangerouslySetInnerHTML>  */
-        /* ------------------------------------------------------------------ */
+            "How I'm completing my PhD in AI remotely from Colombia, why I built this blog, and what I plan to share here.",
         content: /* html */ `
-<h2 id="why-bother">Why bother?</h2>
 <p>
-  Telecom backbones still rely on <em>static</em> shortest-path algorithms. They’re fast,
-  but when a link fails, thousands of light-paths have to shuffle—often taking
-  minutes and dropping packets along the way.  
-  <strong>Goal:</strong> re-route in &lt; 50 ms while keeping spectrum fragmentation low.
+  Welcome to the blog. I’m Ryan McCann, a PhD student in Computer Engineering at the University of Massachusetts Lowell. I'm currently researching how to apply artificial intelligence to optimize large-scale optical networks.
 </p>
 
-<h2 id="system-overview">System overview</h2>
-<img
-  src="/assets/blog/rl-optical-architecture.jpg"
-  alt="RL agent monitors an SDN controller and updates the spectrum allocation table"
-  style="margin:2rem auto; display:block; border-radius:0.75rem; box-shadow:0 6px 18px rgba(0,0,0,.15); max-width:100%;"
-/>
 <p>
-  Everything runs on an <abbr title="Software-Defined Networking">SDN</abbr> controller:
+  But here's the part that usually gets a double-take: I'm doing all of this from Colombia.
 </p>
+
+<h2>Why I’m Here</h2>
+
+<p>
+  There are a few reasons. First: cost of living. If you’ve ever lived on a PhD stipend in Massachusetts, you know the math doesn’t always work. Rent, food, transportation, it adds up fast. By contrast, living in Colombia allows me to comfortably support myself while staying focused on research.
+</p>
+
+<p>
+  Second: lifestyle. I’ve always been fascinated with Latin American culture. I’ve studied Spanish for years and now speak it fluently (C1). My girlfriend is here, and I’ve found community, routine, and inspiration in this country, all without sacrificing academic rigor.
+</p>
+
+<p>
+  And third: my program is fully remote. I still travel back to the U.S. to present at conferences or speak at my university, but day-to-day, I’m able to contribute meaningfully from anywhere with a decent internet connection.
+</p>
+
+<h2>Why I Built This Blog</h2>
+
+<p>
+  I built this blog to share the journey, not just the polished version of academic life, but the reality of researching, building, and learning while living outside the usual mold.
+</p>
+
+<p>
+  I’ll use this space to:
+</p>
+
 <ul>
-  <li><strong>State \(s_t\):</strong> 64×64 adjacency + current spectrum occupancy (≈ 8 k dims)</li>
-  <li><strong>Action \(a_t\):</strong> assign a contiguous slice <code>(f, Δf)</code> on a path</li>
-  <li><strong>Reward \(r_t\):</strong> <code>+1</code> for accepted demand, <code>−1</code> for block, <code>−λ</code> for fragmentation</li>
+  <li>Talk openly about the PhD experience, the good, the hard, and the unexpected</li>
+  <li>Share the technical work I’m doing in AI and optical networking</li>
+  <li>Explain how I stay up to date with new research without burning out</li>
+  <li>Talk about tools, productivity systems, and mindsets that help me stay afloat</li>
+  <li>Explore what happens next, after the PhD, after this chapter</li>
 </ul>
 
-<h3 id="model">Model</h3>
-<pre><code class="language-python">
-class ActorCritic(nn.Module):
-    def __init__(self, n_fibres, n_nodes):
-        super().__init__()
-        self.encoder = GCN(in_dim=n_fibres, hidden=128, layers=3)
-        self.policy  = nn.Linear(128, n_nodes ** 2 * 32)  # path × slot
-        self.value   = nn.Linear(128, 1)
+<h2>Who This Blog Is For</h2>
 
-    def forward(self, x):
-        z = self.encoder(x)
-        return self.policy(z), self.value(z)
-</code></pre>
-<p class="text-sm text-gray-500 dark:text-gray-400">
-  (Full PyTorch code &amp; training script in the repo.)
+<p>
+  Maybe you’re a student thinking about grad school. Maybe you're already in it. Maybe you're just curious how someone ended up writing code for neural networks while sipping coffee in Medellín.
 </p>
 
-<h2 id="results">Results</h2>
-<table>
-  <thead>
-    <tr><th>Metric</th><th>Dijkstra&nbsp;+&nbsp;First-Fit</th><th>Our RL agent</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>Blocking probability&nbsp;↓</td><td>7.8 %</td><td><strong>5.1 %</strong></td></tr>
-    <tr><td>Avg search time&nbsp;↓</td><td>4.3 ms</td><td><strong>0.9 ms</strong></td></tr>
-    <tr><td>Spectral utilisation&nbsp;↑</td><td>64 %</td><td><strong>71 %</strong></td></tr>
-  </tbody>
-</table>
-
-<h2 id="deployment-notes">Deployment notes</h2>
-<ol>
-  <li>The model is a 1.2 MB ONNX—tiny enough for embedded NPU cores.</li>
-  <li>Inference served over gRPC; 99-th latency = 1.7 ms on an i7-1260P.</li>
-  <li>We keep a bounded replay buffer of the latest 5 000 demands and fine-tune nightly.</li>
-</ol>
-
-<blockquote>
-  <p><strong>Tip:</strong> Always leave a classical heuristic fallback—you will miss an edge-case at 3 a.m.</p>
-</blockquote>
-
-<h2 id="next-steps">Next steps</h2>
 <p>
-  The obvious path is multi-agent RL so routers co-ordinate instead of relying on a
-  central brain. Expecting a 10–15 % extra gain from local traffic heuristics.
+  Either way, I hope you find something useful here.
+</p>
+
+<h2>What’s Next</h2>
+
+<p>
+  In upcoming posts, I’ll show how I structure my time, how I track research trends (without doomscrolling), and how I’ve learned to work independently while staying deeply connected to a global community of engineers and researchers.
+</p>
+
+<p>
+  If any of that sounds interesting, stick around. This blog will grow with me.
 </p>
 
 <hr/>
 
 <p class="text-center text-sm text-gray-500 dark:text-gray-400">
-  Code &amp; data: <a href="https://github.com/ryanmccann1024/rl-optical" target="_blank">github.com/ryanmccann1024/rl-optical</a>
+  📨 Questions? Feel free to reach out on <a href="https://github.com/ryanmccann1024" target="_blank">GitHub</a> or connect with me on <a href="https://www.linkedin.com/in/ryanmccann1024/" target="_blank">LinkedIn</a>.
 </p>
 `,
     },
+
     {
-        slug: "stub-fpga-toolchain",
-        title: "📌 Stub: Automating My FPGA Toolchain (coming soon)",
-        date: "2025-06-30",
+        slug: "how-i-track-research-without-burning-out",
+        title: "📌 Stub: How I Stay Up to Date on Research Without Burning Out",
+        date: "2025-07-01",
         author: "Ryan McCann",
-        topics: ["FPGA", "Dev-Ops"],
-        cover: "/assets/blog/stub.jpg",        // add a placeholder image if you like
-        summary: "Work-in-progress notes on scripting Vivado & ModelSim.",
-        content: "<p>Draft post placeholder. Stay tuned!</p>",
+        topics: ["PhD Life", "Research Tools", "Mental Clarity"],
+        cover: "/assets/blog/stub.jpg",
+        summary:
+            "A peek into how I manage the flood of papers, tools, newsletters, and code, without losing my mind.",
+        content: "<p>Draft in progress. Coming soon.</p>",
     },
+
     {
-        slug: "stub-phd-timeblocking",
-        title: "📌 Stub: Time-blocking a PhD Semester (coming soon)",
+        slug: "whats-next-after-phd",
+        title: "📌 Stub: What's Next After the PhD?",
         date: "2025-07-15",
         author: "Ryan McCann",
-        topics: ["Productivity"],
+        topics: ["Career Planning", "Research Trajectory"],
         cover: "/assets/blog/stub.jpg",
-        summary: "Experiments with 10-minute granularity and Feynman hourglasses.",
-        content: "<p>Draft post placeholder. Stay tuned!</p>",
+        summary:
+            "What I'm planning after graduation, research, startups, remote-first labs, and real-world impact.",
+        content: "<p>Draft in progress. Coming soon.</p>",
     },
 ];

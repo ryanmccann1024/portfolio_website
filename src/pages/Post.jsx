@@ -12,8 +12,11 @@ export default function Post() {
         return (
             <div className="mx-auto max-w-2xl px-4 py-24">
                 <p>Post not found.</p>
-                <Link to="/blog" className="text-blue-600 hover:underline">
-                    ← Back to blog
+                <Link
+                    to="/blog"
+                    className="mb-8 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 font-semibold text-white shadow transition-colors duration-200 hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600"
+                >
+                Back to blog
                 </Link>
             </div>
         );
