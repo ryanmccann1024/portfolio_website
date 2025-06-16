@@ -29,7 +29,7 @@ export default function Hero() {
                 <h1 className="mb-6 text-6xl font-extrabold leading-tight tracking-tight md:text-7xl">
                     Hi, I’m <span className="text-blue-600">Ryan</span>
                 </h1>
-                <p className="mx-auto mb-12 max-w-2xl text-xl font-medium text-gray-700 md:text-2xl">
+                <p className="mx-auto mb-12 max-w-2xl text-xl font-medium text-gray-700 md:text-2xl dark:text-gray-50">
                     Ph.D. ML engineer turning research prototypes into production‑grade, low‑latency systems, available
                     remote in EU or USA‑friendly hours.
                 </p>
