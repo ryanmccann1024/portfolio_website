@@ -1,38 +1,63 @@
 // src/pages/Blog.jsx
-import {useState, useMemo} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {Link} from "react-router-dom";
 import {Calendar, Search} from "lucide-react";
 import {motion, AnimatePresence} from "framer-motion";
-import {posts} from "../data/posts";
+import {mapPage} from "../utils/mapPage";
 
-/* Wrap Link so Framer can animate it */
+const DB = "2142d0f5c7e58041ab31e0fb965c74e5"; // ← your DB ID
 const MotionLink = motion(Link);
 
 export default function Blog() {
-    /* ---------------- search & filter state ---------------- */
+    const [posts, setPosts] = useState([]);
     const [query, setQuery] = useState("");
-    const [topic, setTopic] = useState("");
+    const [topics, setTopics] = useState(new Set()); // ← multi-select
 
+    /* ── fetch rows once ── */
+    useEffect(() => {
+        fetch(`https://notion-api.splitbee.io/v1/table/${DB}`)
+            .then((r) => r.json())
+            .then((rows) =>
+                setPosts(
+                    rows
+                        .filter((r) => r.Status === "Published")
+                        .sort((a, b) => new Date(b.Date) - new Date(a.Date))
+                        .map(mapPage)
+                )
+            )
+            .catch(console.error);
+    }, []);
+
+    /* unique topic list */
     const allTopics = useMemo(
-        () => [...new Set(posts.flatMap((p) => p.topics))],
-        []
+        () => [...new Set(posts.flatMap((p) => p.tags))],
+        [posts]
     );
 
-    const filtered = useMemo(
-        () =>
-            posts.filter(({title, summary, topics}) => {
-                const q = query.toLowerCase();
-                return (
-                    (topic ? topics.includes(topic) : true) &&
-                    (!q ||
-                        title.toLowerCase().includes(q) ||
-                        summary.toLowerCase().includes(q))
-                );
-            }),
-        [query, topic]
-    );
+    /* helper to add/remove topic */
+    function toggleTopic(t) {
+        setTopics((prev) => {
+            const next = new Set(prev);
+            next.has(t) ? next.delete(t) : next.add(t);
+            return next;
+        });
+    }
 
-    /* ---------------- ui ---------------- */
+    /* filter */
+    const filtered = useMemo(() => {
+        const q = query.toLowerCase();
+        return posts.filter(({title, excerpt, tags}) => {
+            const matchesSearch =
+                !q ||
+                title.toLowerCase().includes(q) ||
+                excerpt.toLowerCase().includes(q);
+            const matchesTopics =
+                topics.size === 0 || [...topics].every((t) => tags.includes(t));
+            return matchesSearch && matchesTopics;
+        });
+    }, [posts, query, topics]);
+
+    /* ── UI ── */
     return (
         <motion.section
             initial={{opacity: 0, y: 15}}
@@ -45,7 +70,7 @@ export default function Blog() {
                 Unpolished thoughts on research, code, and caffeine.
             </p>
 
-            {/* search & chips */}
+            {/* search + chips */}
             <div className="mb-14 flex flex-wrap items-center gap-4">
                 {/* search box */}
                 <label className="relative grow basis-64 sm:basis-80">
@@ -62,21 +87,21 @@ export default function Blog() {
                     />
                 </label>
 
-                {/* topic chips */}
+                {/* topic pills */}
                 <div className="flex flex-wrap gap-2">
                     {allTopics.map((t) => {
-                        const active = topic === t;
+                        const active = topics.has(t);
                         return (
                             <motion.button
                                 key={t}
                                 whileTap={{scale: 0.9}}
-                                animate={{scale: active ? 1.1 : 1}}
+                                animate={{scale: active ? 1.08 : 1}}
                                 transition={{type: "spring", stiffness: 400, damping: 18}}
-                                onClick={() => setTopic(active ? "" : t)}
-                                className={`rounded-full px-3 py-1.5 text-xs font-medium shadow-sm transition
+                                onClick={() => toggleTopic(t)}
+                                className={`rounded-full px-3 py-1.5 text-xs font-medium shadow transition-colors duration-150
                   ${
                                     active
-                                        ? "bg-blue-600 text-white ring-2 ring-blue-600 ring-offset-2 ring-offset-white dark:ring-offset-slate-900"
+                                        ? "bg-blue-600 text-white"
                                         : "bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-slate-700 dark:text-gray-100 dark:hover:bg-slate-600"
                                 }`}
                             >
@@ -87,13 +112,13 @@ export default function Blog() {
                 </div>
             </div>
 
-            {/* animated card grid */}
+            {/* card grid */}
             <motion.div layout className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
                 <AnimatePresence mode="popLayout">
                     {filtered.map(
-                        ({slug, title, date, summary, cover, author, topics}) => (
+                        ({id, slug, title, date, excerpt, cover, author, tags}) => (
                             <MotionLink
-                                key={slug}
+                                key={id}
                                 to={`/blog/${slug}`}
                                 layout
                                 initial={{opacity: 0, y: 20}}
@@ -105,11 +130,13 @@ export default function Blog() {
                            border border-gray-200 hover:-translate-y-1 hover:shadow-lg
                            dark:from-slate-800 dark:via-slate-800 dark:to-slate-700 dark:border-slate-700"
                             >
-                                <img
-                                    src={cover}
-                                    alt=""
-                                    className="h-44 w-full object-cover transition duration-300 group-hover:scale-105"
-                                />
+                                {cover && (
+                                    <img
+                                        src={cover}
+                                        alt=""
+                                        className="h-44 w-full object-cover transition duration-300 group-hover:scale-105"
+                                    />
+                                )}
 
                                 <div className="flex grow flex-col p-6">
                                     <h2 className="mb-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400">
@@ -125,11 +152,11 @@ export default function Blog() {
                                     </div>
 
                                     <p className="mb-4 line-clamp-3 grow text-sm text-gray-700 dark:text-gray-300">
-                                        {summary}
+                                        {excerpt}
                                     </p>
 
                                     <div className="mb-6 flex flex-wrap gap-2">
-                                        {topics.map((t) => (
+                                        {tags.map((t) => (
                                             <span
                                                 key={t}
                                                 className="rounded-full bg-blue-600/10 px-2 py-0.5 text-[11px] font-medium text-blue-700 dark:bg-blue-400/10 dark:text-blue-300"

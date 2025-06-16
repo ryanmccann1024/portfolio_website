@@ -44,18 +44,19 @@ const projects = [
         status: "in-progress",
     },
     {
-        title: "Personal Portfolio (this site)",
+        title: "Scalable Blog w/ Notion CMS + GPT",
         img: reactImg,
         tech: [
             "React",
-            "Vite",
-            "Tailwind",
+            "Notion API",
+            "react-notion-x",
             "Framer Motion",
-            "Lighthouse 99/100",
+            "Tailwind",
+            "Splitbee",
         ],
         blurb:
-            "Designed + built in 24 h: responsive, animated portfolio scoring 99 Performance / 100 Accessibility on Lighthouse. Demonstrates modern React stack with motion-first UX.",
-        repo: "https://github.com/ryanmccann1024/portfolio_website",
+            "Launched this blog platform in < 1 week with zero CMS experience, guided by ChatGPT. Architecture designed in < 24h. Notion handles content with instant sync, dark mode support, dynamic routing, and animated UX. SEO & mobile-ready.",
+        repo: "https://github.com/ryanmccann1024/portfolio_website", // same repo
         demo: null,
         status: "launched",
     },
