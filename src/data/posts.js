@@ -1,3 +1,6 @@
+import blogPostOneImg from "../assets/blog/colombia-phd-cover.png";
+import comingSoon from "../assets/blog/coming-soon.png";
+
 export const posts = [
     {
         slug: "remote-phd-colombia-blog-launch",
@@ -5,7 +8,7 @@ export const posts = [
         date: "2025-06-17",
         author: "Ryan McCann",
         topics: ["PhD Life", "Remote Work", "Personal Journey"],
-        cover: "/assets/blog/colombia-phd-cover.jpg", // save a banner photo here
+        cover: blogPostOneImg,
         summary:
             "How I'm completing my PhD in AI remotely from Colombia, why I built this blog, and what I plan to share here.",
         content: /* html */ `
@@ -72,7 +75,7 @@ export const posts = [
 <hr/>
 
 <p class="text-center text-sm text-gray-500 dark:text-gray-400">
-  📨 Questions? Feel free to reach out on <a href="https://github.com/ryanmccann1024" target="_blank">GitHub</a> or connect with me on <a href="https://www.linkedin.com/in/ryanmccann1024/" target="_blank">LinkedIn</a>.
+  📨 Questions? Feel free to reach out on <a href="https://github.com/ryanmccann1024" target="_blank">GitHub</a> or connect with me on <a href="https://www.linkedin.com/in/ryanjmccann/" target="_blank">LinkedIn</a>.
 </p>
 `,
     },
@@ -83,7 +86,7 @@ export const posts = [
         date: "2025-07-01",
         author: "Ryan McCann",
         topics: ["PhD Life", "Research Tools", "Mental Clarity"],
-        cover: "/assets/blog/stub.jpg",
+        cover: comingSoon,
         summary:
             "A peek into how I manage the flood of papers, tools, newsletters, and code, without losing my mind.",
         content: "<p>Draft in progress. Coming soon.</p>",
@@ -95,7 +98,7 @@ export const posts = [
         date: "2025-07-15",
         author: "Ryan McCann",
         topics: ["Career Planning", "Research Trajectory"],
-        cover: "/assets/blog/stub.jpg",
+        cover: comingSoon,
         summary:
             "What I'm planning after graduation, research, startups, remote-first labs, and real-world impact.",
         content: "<p>Draft in progress. Coming soon.</p>",
