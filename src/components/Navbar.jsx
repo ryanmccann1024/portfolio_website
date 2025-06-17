@@ -36,18 +36,18 @@ export default function Navbar() {
                 transition={{duration: 0.35}}
                 className="fixed inset-x-0 top-0 z-30 bg-white/70 backdrop-blur dark:bg-slate-900/70"
             >
-                <nav className="mx-auto flex max-w-6xl items-center px-4 py-3">
+                <nav className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
                     {/* logo */}
                     <Link
                         to="/"
-                        className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50"
                         onClick={close}
+                        className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50"
                     >
                         Ryan McCann
                     </Link>
 
-                    {/* desktop links — centered via mx-auto */}
-                    <ul className="mx-auto hidden gap-8 text-sm font-semibold md:flex">
+                    {/* desktop links — absolutely centred */}
+                    <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 gap-8 text-sm font-semibold md:flex">
                         {links.map(({label, href}) => (
                             <li key={label}>
                                 <Link
