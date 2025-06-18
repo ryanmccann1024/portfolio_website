@@ -1,42 +1,45 @@
 // src/pages/Blog.jsx
-import {useEffect, useMemo, useState} from "react";
-import {Link} from "react-router-dom";
-import {Calendar, Search} from "lucide-react";
-import {motion, AnimatePresence} from "framer-motion";
-import {mapPage} from "../utils/mapPage";
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { Calendar, Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Spinner from "../components/Spinner";                // ← ADD
+import { mapPage } from "../utils/mapPage";
 
-const DB = "2142d0f5c7e58041ab31e0fb965c74e5"; // ← your DB ID
+const DB = "2142d0f5c7e58041ab31e0fb965c74e5";
 const MotionLink = motion(Link);
 
 export default function Blog() {
-    const [posts, setPosts] = useState([]);
-    const [query, setQuery] = useState("");
-    const [topics, setTopics] = useState(new Set()); // ← multi-select
+    const [posts, setPosts]   = useState([]);
+    const [loading, setLoading] = useState(true);            // ← ADD
+    const [query, setQuery]   = useState("");
+    const [topics, setTopics] = useState(new Set());
 
     /* ── fetch rows once ── */
     useEffect(() => {
         fetch(`https://notion-api.splitbee.io/v1/table/${DB}`)
-            .then((r) => r.json())
-            .then((rows) =>
+            .then(r => r.json())
+            .then(rows =>
                 setPosts(
                     rows
-                        .filter((r) => r.Status === "Published")
+                        .filter(r => r.Status === "Published")
                         .sort((a, b) => new Date(b.Date) - new Date(a.Date))
                         .map(mapPage)
                 )
             )
-            .catch(console.error);
+            .catch(console.error)
+            .finally(() => setLoading(false));                   // ← ADD
     }, []);
 
     /* unique topic list */
     const allTopics = useMemo(
-        () => [...new Set(posts.flatMap((p) => p.tags))],
+        () => [...new Set(posts.flatMap(p => p.tags))],
         [posts]
     );
 
     /* helper to add/remove topic */
     function toggleTopic(t) {
-        setTopics((prev) => {
+        setTopics(prev => {
             const next = new Set(prev);
             next.has(t) ? next.delete(t) : next.add(t);
             return next;
@@ -46,25 +49,36 @@ export default function Blog() {
     /* filter */
     const filtered = useMemo(() => {
         const q = query.toLowerCase();
-        return posts.filter(({title, excerpt, tags}) => {
+        return posts.filter(({ title, excerpt, tags }) => {
             const matchesSearch =
                 !q ||
                 title.toLowerCase().includes(q) ||
                 excerpt.toLowerCase().includes(q);
             const matchesTopics =
-                topics.size === 0 || [...topics].every((t) => tags.includes(t));
+                topics.size === 0 || [...topics].every(t => tags.includes(t));
             return matchesSearch && matchesTopics;
         });
     }, [posts, query, topics]);
 
+    /* ── show identical spinner while loading ── */
+    if (loading) {
+        return (
+            <AnimatePresence>
+                <Spinner key="spinner" />
+            </AnimatePresence>
+        );
+    }
+
     /* ── UI ── */
     return (
         <motion.section
-            initial={{opacity: 0, y: 15}}
-            animate={{opacity: 1, y: 0}}
-            transition={{duration: 0.35}}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
             className="mx-auto max-w-6xl px-4 py-24"
         >
+            {/* …everything below this point is 100 % your original markup … */}
+            {/* title */}
             <h1 className="mb-3 text-5xl font-extrabold tracking-tight">Blog</h1>
             <p className="mb-12 text-lg text-gray-600 dark:text-gray-400">
                 Unpolished thoughts on research, code, and caffeine.
@@ -82,24 +96,23 @@ export default function Blog() {
                         type="text"
                         placeholder="Search posts…"
                         value={query}
-                        onChange={(e) => setQuery(e.target.value)}
+                        onChange={e => setQuery(e.target.value)}
                         className="w-full rounded-full border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm shadow-sm placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-gray-100"
                     />
                 </label>
 
                 {/* topic pills */}
                 <div className="flex flex-wrap gap-2">
-                    {allTopics.map((t) => {
+                    {allTopics.map(t => {
                         const active = topics.has(t);
                         return (
                             <motion.button
                                 key={t}
-                                whileTap={{scale: 0.9}}
-                                animate={{scale: active ? 1.08 : 1}}
-                                transition={{type: "spring", stiffness: 400, damping: 18}}
+                                whileTap={{ scale: 0.9 }}
+                                animate={{ scale: active ? 1.08 : 1 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 18 }}
                                 onClick={() => toggleTopic(t)}
-                                className={`rounded-full px-3 py-1.5 text-xs font-medium shadow transition-colors duration-150
-                  ${
+                                className={`rounded-full px-3 py-1.5 text-xs font-medium shadow transition-colors duration-150 ${
                                     active
                                         ? "bg-blue-600 text-white"
                                         : "bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-slate-700 dark:text-gray-100 dark:hover:bg-slate-600"
@@ -116,19 +129,19 @@ export default function Blog() {
             <motion.div layout className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
                 <AnimatePresence mode="popLayout">
                     {filtered.map(
-                        ({id, slug, title, date, excerpt, cover, author, tags}) => (
+                        ({ id, slug, title, date, excerpt, cover, author, tags }) => (
                             <MotionLink
                                 key={id}
                                 to={`/blog/${slug}`}
                                 layout
-                                initial={{opacity: 0, y: 20}}
-                                animate={{opacity: 1, y: 0}}
-                                exit={{opacity: 0, y: -20}}
-                                transition={{duration: 0.25}}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.25 }}
                                 className="group flex flex-col overflow-hidden rounded-xl bg-gradient-to-br
-                           from-white via-white to-gray-50 shadow
-                           border border-gray-200 hover:-translate-y-1 hover:shadow-lg
-                           dark:from-slate-800 dark:via-slate-800 dark:to-slate-700 dark:border-slate-700"
+                  from-white via-white to-gray-50 shadow border border-gray-200
+                  hover:-translate-y-1 hover:shadow-lg dark:from-slate-800
+                  dark:via-slate-800 dark:to-slate-700 dark:border-slate-700"
                             >
                                 {cover && (
                                     <img
@@ -143,9 +156,8 @@ export default function Blog() {
                                         {title}
                                     </h2>
 
-                                    <div
-                                        className="mb-3 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                                        <Calendar size={14}/>
+                                    <div className="mb-3 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                        <Calendar size={14} />
                                         {new Date(date).toLocaleDateString()}
                                         <span className="mx-2">•</span>
                                         {author}
@@ -156,7 +168,7 @@ export default function Blog() {
                                     </p>
 
                                     <div className="mb-6 flex flex-wrap gap-2">
-                                        {tags.map((t) => (
+                                        {tags.map(t => (
                                             <span
                                                 key={t}
                                                 className="rounded-full bg-blue-600/10 px-2 py-0.5 text-[11px] font-medium text-blue-700 dark:bg-blue-400/10 dark:text-blue-300"
@@ -166,8 +178,7 @@ export default function Blog() {
                                         ))}
                                     </div>
 
-                                    <span
-                                        className="mt-auto text-sm font-medium text-blue-600 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100 dark:text-blue-400">
+                                    <span className="mt-auto text-sm font-medium text-blue-600 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100 dark:text-blue-400">
                     Read more →
                   </span>
                                 </div>
