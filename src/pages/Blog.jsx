@@ -1,21 +1,44 @@
 // src/pages/Blog.jsx
-import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { Calendar, Search } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import Spinner from "../components/Spinner";                // ← ADD
-import { mapPage } from "../utils/mapPage";
+import {useEffect, useMemo, useState} from "react";
+import {Link} from "react-router-dom";
+import {Calendar, Search} from "lucide-react";
+import {motion, AnimatePresence} from "framer-motion";
+import Spinner from "../components/Spinner";
+import {mapPage} from "../utils/mapPage";
 
 const DB = "2142d0f5c7e58041ab31e0fb965c74e5";
 const MotionLink = motion(Link);
 
+function ImageWithLoader({src, alt}) {
+    const [loaded, setLoaded] = useState(false);
+
+    return (
+        <div className="relative h-44 w-full overflow-hidden">
+            <img
+                src={src}
+                alt={alt}
+                loading="lazy"
+                decoding="async"
+                onLoad={() => setLoaded(true)}
+                className={`h-full w-full object-cover transition duration-300 group-hover:scale-105 ${
+                    loaded ? "opacity-100" : "opacity-0"
+                }`}
+            />
+            {!loaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-800">
+                    <Spinner small/>
+                </div>
+            )}
+        </div>
+    );
+}
+
 export default function Blog() {
-    const [posts, setPosts]   = useState([]);
-    const [loading, setLoading] = useState(true);            // ← ADD
-    const [query, setQuery]   = useState("");
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [query, setQuery] = useState("");
     const [topics, setTopics] = useState(new Set());
 
-    /* ── fetch rows once ── */
     useEffect(() => {
         fetch(`https://notion-api.splitbee.io/v1/table/${DB}`)
             .then(r => r.json())
@@ -28,16 +51,14 @@ export default function Blog() {
                 )
             )
             .catch(console.error)
-            .finally(() => setLoading(false));                   // ← ADD
+            .finally(() => setLoading(false));
     }, []);
 
-    /* unique topic list */
     const allTopics = useMemo(
         () => [...new Set(posts.flatMap(p => p.tags))],
         [posts]
     );
 
-    /* helper to add/remove topic */
     function toggleTopic(t) {
         setTopics(prev => {
             const next = new Set(prev);
@@ -46,10 +67,9 @@ export default function Blog() {
         });
     }
 
-    /* filter */
     const filtered = useMemo(() => {
         const q = query.toLowerCase();
-        return posts.filter(({ title, excerpt, tags }) => {
+        return posts.filter(({title, excerpt, tags}) => {
             const matchesSearch =
                 !q ||
                 title.toLowerCase().includes(q) ||
@@ -60,33 +80,27 @@ export default function Blog() {
         });
     }, [posts, query, topics]);
 
-    /* ── show identical spinner while loading ── */
     if (loading) {
         return (
             <AnimatePresence>
-                <Spinner key="spinner" />
+                <Spinner key="spinner"/>
             </AnimatePresence>
         );
     }
 
-    /* ── UI ── */
     return (
         <motion.section
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
+            initial={{opacity: 0, y: 15}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.35}}
             className="mx-auto max-w-6xl px-4 py-24"
         >
-            {/* …everything below this point is 100 % your original markup … */}
-            {/* title */}
             <h1 className="mb-3 text-5xl font-extrabold tracking-tight">Blog</h1>
             <p className="mb-12 text-lg text-gray-600 dark:text-gray-400">
                 Unpolished thoughts on research, code, and caffeine.
             </p>
 
-            {/* search + chips */}
             <div className="mb-14 flex flex-wrap items-center gap-4">
-                {/* search box */}
                 <label className="relative grow basis-64 sm:basis-80">
                     <Search
                         size={18}
@@ -101,16 +115,15 @@ export default function Blog() {
                     />
                 </label>
 
-                {/* topic pills */}
                 <div className="flex flex-wrap gap-2">
                     {allTopics.map(t => {
                         const active = topics.has(t);
                         return (
                             <motion.button
                                 key={t}
-                                whileTap={{ scale: 0.9 }}
-                                animate={{ scale: active ? 1.08 : 1 }}
-                                transition={{ type: "spring", stiffness: 400, damping: 18 }}
+                                whileTap={{scale: 0.9}}
+                                animate={{scale: active ? 1.08 : 1}}
+                                transition={{type: "spring", stiffness: 400, damping: 18}}
                                 onClick={() => toggleTopic(t)}
                                 className={`rounded-full px-3 py-1.5 text-xs font-medium shadow transition-colors duration-150 ${
                                     active
@@ -125,39 +138,33 @@ export default function Blog() {
                 </div>
             </div>
 
-            {/* card grid */}
             <motion.div layout className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
                 <AnimatePresence mode="popLayout">
                     {filtered.map(
-                        ({ id, slug, title, date, excerpt, cover, author, tags }) => (
+                        ({id, slug, title, date, excerpt, cover, author, tags}) => (
                             <MotionLink
                                 key={id}
                                 to={`/blog/${slug}`}
                                 layout
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.25 }}
+                                initial={{opacity: 0, y: 20}}
+                                animate={{opacity: 1, y: 0}}
+                                exit={{opacity: 0, y: -20}}
+                                transition={{duration: 0.25}}
                                 className="group flex flex-col overflow-hidden rounded-xl bg-gradient-to-br
-                  from-white via-white to-gray-50 shadow border border-gray-200
-                  hover:-translate-y-1 hover:shadow-lg dark:from-slate-800
-                  dark:via-slate-800 dark:to-slate-700 dark:border-slate-700"
+                                    from-white via-white to-gray-50 shadow border border-gray-200
+                                    hover:-translate-y-1 hover:shadow-lg dark:from-slate-800
+                                    dark:via-slate-800 dark:to-slate-700 dark:border-slate-700"
                             >
-                                {cover && (
-                                    <img
-                                        src={cover}
-                                        alt=""
-                                        className="h-44 w-full object-cover transition duration-300 group-hover:scale-105"
-                                    />
-                                )}
+                                {cover && <ImageWithLoader src={cover} alt=""/>}
 
                                 <div className="flex grow flex-col p-6">
                                     <h2 className="mb-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400">
                                         {title}
                                     </h2>
 
-                                    <div className="mb-3 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                                        <Calendar size={14} />
+                                    <div
+                                        className="mb-3 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                        <Calendar size={14}/>
                                         {new Date(date).toLocaleDateString()}
                                         <span className="mx-2">•</span>
                                         {author}
@@ -173,14 +180,15 @@ export default function Blog() {
                                                 key={t}
                                                 className="rounded-full bg-blue-600/10 px-2 py-0.5 text-[11px] font-medium text-blue-700 dark:bg-blue-400/10 dark:text-blue-300"
                                             >
-                        {t}
-                      </span>
+                                                {t}
+                                            </span>
                                         ))}
                                     </div>
 
-                                    <span className="mt-auto text-sm font-medium text-blue-600 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100 dark:text-blue-400">
-                    Read more →
-                  </span>
+                                    <span
+                                        className="mt-auto text-sm font-medium text-blue-600 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100 dark:text-blue-400">
+                                        Read more →
+                                    </span>
                                 </div>
                             </MotionLink>
                         )
