@@ -6,6 +6,42 @@ import {motion} from "framer-motion";
 import fusionImg from "../assets/projects/fusion.png";
 import podmanImg from "../assets/projects/podman.png";
 import reactImg from "../assets/projects/react.png";
+import {useState, useEffect} from "react";
+import Spinner from "../components/Spinner";
+
+/* ── Flicker-Free Image Wrapper ───────────────────────────── */
+function CardImage({src, alt}) {
+    const [loaded, setLoaded] = useState(false);
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        if (loaded) {
+            const timeout = setTimeout(() => setVisible(true), 50);
+            return () => clearTimeout(timeout);
+        }
+    }, [loaded]);
+
+    return (
+        <div className="relative h-48 w-full overflow-hidden">
+            <img
+                src={src}
+                alt={alt}
+                loading="eager"
+                decoding="async"
+                onLoad={() => setLoaded(true)}
+                className={`h-full w-full object-cover transition duration-300 group-hover:scale-105 ${
+                    visible ? "opacity-100" : "opacity-0"
+                }`}
+                style={{willChange: "opacity", backfaceVisibility: "hidden"}}
+            />
+            {!visible && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-800">
+                    <Spinner small/>
+                </div>
+            )}
+        </div>
+    );
+}
 
 /* ── PROJECT DATA ───────────────────────────────────────── */
 const projects = [
@@ -55,123 +91,110 @@ const projects = [
     },
 ];
 
-/* ── CARD VARIANT ──────────────────────────────────────── */
-const cardVariant = {
-    hidden: {opacity: 0, y: 40},
-    show: (i) => ({
-        opacity: 1,
-        y: 0,
-        transition: {delay: i * 0.1, duration: 0.4, ease: "easeOut"},
-    }),
-};
-
 /* ── COMPONENT ─────────────────────────────────────────── */
 export default function Projects() {
     return (
         <section id="projects" className="bg-gray-50 py-24 dark:bg-slate-900">
-            <div className="mx-auto max-w-6xl px-4">
-                <h2 className="mb-12 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50">
-                    Highlight Projects
-                </h2>
+            <motion.div
+                initial={{opacity: 0, y: 40}}
+                whileInView={{opacity: 1, y: 0}}
+                viewport={{once: true, amount: 0.3}}
+                transition={{duration: 0.5}}
+            >
+                <div className="mx-auto max-w-6xl px-4">
+                    <h2 className="mb-12 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50">
+                        Highlight Projects
+                    </h2>
 
-                <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-                    {projects.map(
-                        ({title, img, tech, blurb, repo, demo, status}, i) => {
-                            const target = demo || repo; // decide where the card should go
-                            const isClickable = Boolean(target);
+                    <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                        {projects.map(
+                            ({title, img, tech, blurb, repo, demo, status}) => {
+                                const target = demo || repo;
+                                const isClickable = Boolean(target);
 
-                            return (
-                                <motion.article
-                                    key={title}
-                                    custom={i}
-                                    variants={cardVariant}
-                                    initial="hidden"
-                                    whileInView="show"
-                                    viewport={{once: true, amount: 0.3}}
-                                    /* click-to-open behaviour */
-                                    onClick={() =>
-                                        isClickable && window.open(target, "_blank", "noopener")
-                                    }
-                                    role={isClickable ? "link" : undefined}
-                                    tabIndex={isClickable ? 0 : undefined}
-                                    className={`group relative cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 ${
-                                        !isClickable ? "cursor-default" : ""
-                                    }`}
-                                >
-                                    {/* screenshot */}
-                                    <img
-                                        src={img}
-                                        alt={`${title} screenshot`}
-                                        className="h-48 w-full object-cover transition duration-300 group-hover:scale-105"
-                                    />
+                                return (
+                                    <motion.article
+                                        key={title}
+                                        onClick={() =>
+                                            isClickable && window.open(target, "_blank", "noopener")
+                                        }
+                                        role={isClickable ? "link" : undefined}
+                                        tabIndex={isClickable ? 0 : undefined}
+                                        className={`group relative cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 ${
+                                            !isClickable ? "cursor-default" : ""
+                                        }`}
+                                    >
+                                        {/* screenshot */}
+                                        <CardImage src={img} alt={`${title} screenshot`}/>
 
-                                    {/* overlay play icon if demo */}
-                                    {demo && (
-                                        <PlayCircle
-                                            className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition group-hover:opacity-90"/>
-                                    )}
+                                        {/* overlay play icon if demo */}
+                                        {demo && (
+                                            <PlayCircle
+                                                className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition group-hover:opacity-90"
+                                            />
+                                        )}
 
-                                    {/* status badge */}
-                                    <span
-                                        className="absolute right-2 top-2 rounded-full bg-blue-600 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-white">
-                    {status}
-                  </span>
+                                        {/* status badge */}
+                                        <span
+                                            className="absolute right-2 top-2 rounded-full bg-blue-600 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-white"
+                                        >
+                                            {status}
+                                        </span>
 
-                                    {/* content */}
-                                    <div className="p-6">
-                                        <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
-                                            {title}
-                                        </h3>
-                                        <p className="mb-4 text-sm text-gray-700 dark:text-gray-300">
-                                            {blurb}
-                                        </p>
+                                        {/* content */}
+                                        <div className="p-6">
+                                            <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
+                                                {title}
+                                            </h3>
+                                            <p className="mb-4 text-sm text-gray-700 dark:text-gray-300">
+                                                {blurb}
+                                            </p>
 
-                                        {/* tech pills */}
-                                        <div className="mb-4 flex flex-wrap gap-2">
-                                            {tech.map((t) => (
-                                                <span
-                                                    key={t}
-                                                    className="rounded-full border border-blue-600/30 bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:border-blue-400/30 dark:bg-blue-900/40 dark:text-blue-300"
-                                                >
-                          {t}
-                        </span>
-                                            ))}
+                                            <div className="mb-4 flex flex-wrap gap-2">
+                                                {tech.map((t) => (
+                                                    <span
+                                                        key={t}
+                                                        className="rounded-full border border-blue-600/30 bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:border-blue-400/30 dark:bg-blue-900/40 dark:text-blue-300"
+                                                    >
+                                                        {t}
+                                                    </span>
+                                                ))}
+                                            </div>
+
+                                            <div className="flex gap-4">
+                                                {repo && (
+                                                    <a
+                                                        href={repo}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        aria-label="GitHub repo"
+                                                        className="text-gray-600 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <GithubIcon size={20}/>
+                                                    </a>
+                                                )}
+                                                {demo && (
+                                                    <a
+                                                        href={demo}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        aria-label="Live demo"
+                                                        className="text-gray-600 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <ExternalLinkIcon size={20}/>
+                                                    </a>
+                                                )}
+                                            </div>
                                         </div>
-
-                                        {/* action icons (still work) */}
-                                        <div className="flex gap-4">
-                                            {repo && (
-                                                <a
-                                                    href={repo}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    aria-label="GitHub repo"
-                                                    className="text-gray-600 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-                                                    onClick={(e) => e.stopPropagation()}
-                                                >
-                                                    <GithubIcon size={20}/>
-                                                </a>
-                                            )}
-                                            {demo && (
-                                                <a
-                                                    href={demo}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    aria-label="Live demo"
-                                                    className="text-gray-600 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-                                                    onClick={(e) => e.stopPropagation()}
-                                                >
-                                                    <ExternalLinkIcon size={20}/>
-                                                </a>
-                                            )}
-                                        </div>
-                                    </div>
-                                </motion.article>
-                            );
-                        }
-                    )}
+                                    </motion.article>
+                                );
+                            }
+                        )}
+                    </div>
                 </div>
-            </div>
+            </motion.div>
         </section>
     );
 }
