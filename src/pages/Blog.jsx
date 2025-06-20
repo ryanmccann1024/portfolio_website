@@ -1,10 +1,10 @@
-// src/pages/Blog.jsx
 import {useEffect, useMemo, useState} from "react";
 import {Link} from "react-router-dom";
 import {Calendar, Search} from "lucide-react";
 import {motion, AnimatePresence} from "framer-motion";
 import Spinner from "../components/Spinner";
 import {mapPage} from "../utils/mapPage";
+import MultiSelectDropdown from "../components/MultiSelectDropdown";
 
 const DB = "2142d0f5c7e58041ab31e0fb965c74e5";
 const MotionLink = motion(Link);
@@ -59,14 +59,6 @@ export default function Blog() {
         [posts]
     );
 
-    function toggleTopic(t) {
-        setTopics(prev => {
-            const next = new Set(prev);
-            next.has(t) ? next.delete(t) : next.add(t);
-            return next;
-        });
-    }
-
     const filtered = useMemo(() => {
         const q = query.toLowerCase();
         return posts.filter(({title, excerpt, tags}) => {
@@ -75,7 +67,7 @@ export default function Blog() {
                 title.toLowerCase().includes(q) ||
                 excerpt.toLowerCase().includes(q);
             const matchesTopics =
-                topics.size === 0 || [...topics].every(t => tags.includes(t));
+                topics.size === 0 || [...topics].some(t => tags.includes(t));
             return matchesSearch && matchesTopics;
         });
     }, [posts, query, topics]);
@@ -115,27 +107,11 @@ export default function Blog() {
                     />
                 </label>
 
-                <div className="flex flex-wrap gap-2">
-                    {allTopics.map(t => {
-                        const active = topics.has(t);
-                        return (
-                            <motion.button
-                                key={t}
-                                whileTap={{scale: 0.9}}
-                                animate={{scale: active ? 1.08 : 1}}
-                                transition={{type: "spring", stiffness: 400, damping: 18}}
-                                onClick={() => toggleTopic(t)}
-                                className={`rounded-full px-3 py-1.5 text-xs font-medium shadow transition-colors duration-150 ${
-                                    active
-                                        ? "bg-blue-600 text-white"
-                                        : "bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-slate-700 dark:text-gray-100 dark:hover:bg-slate-600"
-                                }`}
-                            >
-                                {t}
-                            </motion.button>
-                        );
-                    })}
-                </div>
+                <MultiSelectDropdown
+                    options={allTopics}
+                    selected={topics}
+                    onChange={setTopics}
+                />
             </div>
 
             <motion.div layout className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -150,10 +126,7 @@ export default function Blog() {
                                 animate={{opacity: 1, y: 0}}
                                 exit={{opacity: 0, y: -20}}
                                 transition={{duration: 0.25}}
-                                className="group flex flex-col overflow-hidden rounded-xl bg-gradient-to-br
-                                    from-white via-white to-gray-50 shadow border border-gray-200
-                                    hover:-translate-y-1 hover:shadow-lg dark:from-slate-800
-                                    dark:via-slate-800 dark:to-slate-700 dark:border-slate-700"
+                                className="group flex flex-col overflow-hidden rounded-xl bg-gradient-to-br from-white via-white to-gray-50 shadow border border-gray-200 hover:-translate-y-1 hover:shadow-lg dark:from-slate-800 dark:via-slate-800 dark:to-slate-700 dark:border-slate-700"
                             >
                                 {cover && <ImageWithLoader src={cover} alt=""/>}
 
