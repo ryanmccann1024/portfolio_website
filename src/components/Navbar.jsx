@@ -171,12 +171,12 @@ export default function Navbar() {
                                     <X size={20} />
                                 </button>
                             </div>
-                            <nav className="p-4 space-y-2">
+                            <nav className="p-4 space-y-1">
                                 <NavLink
                                     to="/blog"
                                     onClick={close}
                                     className={({ isActive }) =>
-                                        `block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                        `block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                                             isActive
                                                 ? "bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white"
                                                 : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800"
@@ -189,9 +189,37 @@ export default function Navbar() {
                                     href="https://github.com/ryanmccann1024/portfolio_website/blob/main/public/pdfs/Ryan_McCann_Resume_v4.pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                                    className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
                                 >
                                     Resume
+                                </a>
+
+                                <div className="my-3 border-t border-gray-100 dark:border-slate-800" />
+
+                                <a
+                                    href="https://github.com/ryanmccann1024"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                                >
+                                    <Github size={18} />
+                                    GitHub
+                                </a>
+                                <a
+                                    href="https://www.linkedin.com/in/ryanjmccann/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                                >
+                                    <Linkedin size={18} />
+                                    LinkedIn
+                                </a>
+                                <a
+                                    href="mailto:ryanjohnmccann@gmail.com"
+                                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                                >
+                                    <Mail size={18} />
+                                    Email
                                 </a>
                             </nav>
                         </motion.aside>
