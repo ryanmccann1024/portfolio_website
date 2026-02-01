@@ -76,29 +76,29 @@ export default function Post() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="prose prose-slate dark:prose-invert mx-auto max-w-2xl px-4 py-24"
+            className="prose prose-sm sm:prose-base prose-slate dark:prose-invert mx-auto max-w-2xl px-4 sm:px-6 py-16 sm:py-24"
         >
             <Link
                 to="/blog"
-                className="mb-6 inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                className="mb-4 sm:mb-6 inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 no-underline"
             >
                 <ArrowLeft size={14} />
                 Back to blog
             </Link>
 
             {meta.cover && (
-                <img src={meta.cover} alt="" className="mb-8 w-full rounded-xl" />
+                <img src={meta.cover} alt="" className="mb-6 sm:mb-8 w-full rounded-lg sm:rounded-xl" />
             )}
 
-            <h1>{meta.title}</h1>
-            <p className="mb-8 mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
-                <Calendar size={14} />
+            <h1 className="text-2xl sm:text-3xl md:text-4xl">{meta.title}</h1>
+            <p className="mb-6 sm:mb-8 mt-2 flex flex-wrap items-center gap-2 text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400">
+                <Calendar size={12} className="sm:w-3.5 sm:h-3.5" />
                 {new Date(meta.date).toLocaleDateString(undefined, {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                 })}
-                <span className="mx-2">•</span> {meta.author}
+                <span className="mx-1 sm:mx-2">•</span> {meta.author}
             </p>
 
             {/* ── wrapper restored ── */}

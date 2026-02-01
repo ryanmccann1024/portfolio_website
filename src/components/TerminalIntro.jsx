@@ -202,20 +202,10 @@ function TypeWriter({ text, onComplete, speed = TYPING_SPEED }) {
     );
 }
 
-// Progress bar - responsive width
+// Progress bar
 function ProgressBar({ onComplete }) {
     const [progress, setProgress] = useState(0);
-    const [barWidth, setBarWidth] = useState(40);
-
-    useEffect(() => {
-        // Adjust bar width based on screen size
-        const updateWidth = () => {
-            setBarWidth(window.innerWidth < 640 ? 20 : 40);
-        };
-        updateWidth();
-        window.addEventListener('resize', updateWidth);
-        return () => window.removeEventListener('resize', updateWidth);
-    }, []);
+    const barWidth = 40;
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -259,15 +249,20 @@ export default function TerminalIntro({ onComplete }) {
     const [isExiting, setIsExiting] = useState(false);
     const terminalRef = useRef(null);
     const [ready, setReady] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(true);
 
-    // Detect mobile screen size
+    // Skip terminal on non-desktop screens (< 1024px)
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 640);
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
+        const checkDesktop = () => {
+            const desktop = window.innerWidth >= 1024;
+            setIsDesktop(desktop);
+            if (!desktop) {
+                onComplete?.();
+            }
+        };
+        checkDesktop();
+        // Don't add resize listener - only check on mount
+    }, [onComplete]);
 
     // Delay start so terminal can fade in first
     useEffect(() => {
@@ -345,6 +340,11 @@ export default function TerminalIntro({ onComplete }) {
 
     const currentItem = terminalScript[scriptIndex];
 
+    // Don't render on non-desktop screens
+    if (!isDesktop) {
+        return null;
+    }
+
     return (
         <AnimatePresence>
             {!isExiting ? (
@@ -380,7 +380,7 @@ export default function TerminalIntro({ onComplete }) {
                     />
 
                     {/* Terminal */}
-                    <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-4">
+                    <div className="absolute inset-0 flex items-center justify-center p-4">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -389,29 +389,29 @@ export default function TerminalIntro({ onComplete }) {
                         >
                             <div className="bg-gray-900/95 backdrop-blur-xl rounded-xl border border-emerald-500/20 shadow-2xl shadow-emerald-900/20 overflow-hidden">
                                 {/* Title bar */}
-                                <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 bg-gray-800/80 border-b border-gray-700/50">
-                                    <div className="flex gap-1.5 sm:gap-2">
-                                        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500" />
-                                        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500" />
-                                        <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-500" />
+                                <div className="flex items-center gap-2 px-4 py-3 bg-gray-800/80 border-b border-gray-700/50">
+                                    <div className="flex gap-2">
+                                        <div className="w-3 h-3 rounded-full bg-red-500" />
+                                        <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                                        <div className="w-3 h-3 rounded-full bg-green-500" />
                                     </div>
                                     <div className="flex-1 text-center">
-                                        <span className="text-[10px] sm:text-xs text-gray-400 font-mono truncate">ryan@neural — zsh</span>
+                                        <span className="text-xs text-gray-400 font-mono">ryan@neural — zsh</span>
                                     </div>
-                                    <span className="text-xs text-gray-600 font-mono hidden sm:block">{new Date().toLocaleTimeString()}</span>
+                                    <span className="text-xs text-gray-600 font-mono">{new Date().toLocaleTimeString()}</span>
                                 </div>
 
                                 {/* Content */}
                                 <div
                                     ref={terminalRef}
-                                    className="p-3 pb-6 sm:p-5 sm:pb-8 font-mono text-xs sm:text-sm h-[350px] sm:h-[400px] md:h-[500px] overflow-y-auto"
+                                    className="p-5 pb-8 font-mono text-sm h-[500px] overflow-y-auto"
                                 >
                                     {/* Boot phase */}
                                     {phase === "boot" && (
-                                        <div className="space-y-0.5 overflow-hidden">
-                                            <div className="text-emerald-400 text-[10px] sm:text-xs mb-2">█▓▒░ NEURAL-OS v4.2.0 ░▒▓█</div>
+                                        <div className="space-y-0.5">
+                                            <div className="text-emerald-400 text-xs mb-2">█▓▒░ NEURAL-OS v4.2.0 ░▒▓█</div>
                                             {bootSequence.slice(0, bootIndex).map((line, i) => (
-                                                <div key={i} className="text-gray-600 text-[10px] sm:text-xs truncate">{line.text}</div>
+                                                <div key={i} className="text-gray-600 text-xs">{line.text}</div>
                                             ))}
                                         </div>
                                     )}
@@ -420,10 +420,10 @@ export default function TerminalIntro({ onComplete }) {
                                     {phase === "terminal" && (
                                         <>
                                             {/* Boot summary */}
-                                            <div className="text-gray-700 text-[10px] sm:text-xs mb-4 space-y-0.5 overflow-hidden">
-                                                <div className="text-emerald-400 text-[10px] sm:text-xs mb-2">█▓▒░ NEURAL-OS v4.2.0 ░▒▓█</div>
+                                            <div className="text-gray-700 text-xs mb-4 space-y-0.5">
+                                                <div className="text-emerald-400 text-xs mb-2">█▓▒░ NEURAL-OS v4.2.0 ░▒▓█</div>
                                                 {bootSequence.slice(-4).map((line, i) => (
-                                                    <div key={i} className="truncate">{line.text}</div>
+                                                    <div key={i}>{line.text}</div>
                                                 ))}
                                             </div>
 
@@ -432,26 +432,26 @@ export default function TerminalIntro({ onComplete }) {
                                                 {completedLines.map((line, i) => (
                                                     <div key={i}>
                                                         {line.type === "info" && (
-                                                            <div className="text-gray-500 text-[10px] sm:text-xs truncate">{line.text}</div>
+                                                            <div className="text-gray-500 text-xs">{line.text}</div>
                                                         )}
-                                                        {line.type === "blank" && <div className="h-2 sm:h-4" />}
+                                                        {line.type === "blank" && <div className="h-4" />}
                                                         {line.type === "command" && (
                                                             <div className="flex items-start gap-1">
                                                                 <Prompt />
-                                                                <span className="text-gray-100 ml-2 break-all">{line.cmd}</span>
+                                                                <span className="text-gray-100 ml-2">{line.cmd}</span>
                                                             </div>
                                                         )}
                                                         {line.type === "output" && (
-                                                            <div className="text-gray-400 pl-4 sm:pl-6 break-words">{line.text}</div>
+                                                            <div className="text-gray-400 pl-6">{line.text}</div>
                                                         )}
                                                         {line.type === "neofetch" && (
                                                             <pre className="text-blue-400 text-xs pl-2 my-2 leading-tight">
-                                                                {isMobile ? neofetchArtMobile : neofetchArt}
+                                                                {neofetchArt}
                                                             </pre>
                                                         )}
                                                         {line.type === "progress-done" && (
-                                                            <div className="text-emerald-400 pl-4 sm:pl-6">
-                                                                [{isMobile ? "████████████████████" : "████████████████████████████████████████"}] 100%
+                                                            <div className="text-emerald-400 pl-6">
+                                                                [████████████████████████████████████████] 100%
                                                             </div>
                                                         )}
                                                     </div>
@@ -461,7 +461,7 @@ export default function TerminalIntro({ onComplete }) {
                                                 {isTyping && currentItem?.type === "command" && (
                                                     <div className="flex items-start gap-1">
                                                         <Prompt />
-                                                        <span className="text-gray-100 ml-2 break-all">
+                                                        <span className="text-gray-100 ml-2">
                                                             <TypeWriter text={currentItem.cmd} onComplete={handleCommandTyped} />
                                                         </span>
                                                     </div>
@@ -469,7 +469,7 @@ export default function TerminalIntro({ onComplete }) {
 
                                                 {/* Progress bar */}
                                                 {currentItem?.type === "progress" && !completedLines.find(l => l.type === "progress-done" && l.index === scriptIndex) && (
-                                                    <div className="pl-4 sm:pl-6">
+                                                    <div className="pl-6">
                                                         <ProgressBar onComplete={handleProgressComplete} />
                                                     </div>
                                                 )}
@@ -480,7 +480,7 @@ export default function TerminalIntro({ onComplete }) {
                             </div>
 
                             {/* Glow */}
-                            <div className="absolute -bottom-6 sm:-bottom-10 left-4 right-4 sm:left-10 sm:right-10 h-12 sm:h-20 bg-emerald-500/15 blur-2xl sm:blur-3xl rounded-full" />
+                            <div className="absolute -bottom-10 left-10 right-10 h-20 bg-emerald-500/15 blur-3xl rounded-full" />
                         </motion.div>
 
                     </div>
@@ -490,9 +490,9 @@ export default function TerminalIntro({ onComplete }) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 2 }}
-                        className="absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 text-gray-500 text-[10px] sm:text-xs font-mono pointer-events-none"
+                        className="absolute top-6 left-1/2 -translate-x-1/2 text-gray-500 text-xs font-mono pointer-events-none"
                     >
-                        tap to skip
+                        click anywhere to skip
                     </motion.div>
                 </motion.div>
             ) : null}

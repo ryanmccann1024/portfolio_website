@@ -38,36 +38,36 @@ export default function ContactSection() {
     const headerOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
     return (
-        <section ref={containerRef} className="py-32">
-            <div className="max-w-6xl mx-auto px-4">
+        <section ref={containerRef} className="py-16 sm:py-24 lg:py-32">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
                 {/* Header */}
                 <motion.div
                     style={{ y: headerY, opacity: headerOpacity }}
-                    className="mb-20 text-center"
+                    className="mb-10 sm:mb-16 lg:mb-20 text-center"
                 >
-                    <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white font-display">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white font-display">
                         <ScrollTextReveal text="Let's Connect" />
                     </h2>
                 </motion.div>
 
                 {/* Contact cards */}
-                <ScrollStagger className="grid md:grid-cols-3 gap-8 auto-rows-fr">
+                <ScrollStagger className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
                     {contacts.map((contact) => (
                         <TiltOnScroll key={contact.label}>
                             <a
                                 href={contact.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group block h-full p-6 bg-white dark:bg-slate-800/80 border border-gray-200/50 dark:border-slate-700/50 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all"
+                                className="group block h-full p-4 sm:p-5 lg:p-6 bg-white dark:bg-slate-800/80 border border-gray-200/50 dark:border-slate-700/50 rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all"
                             >
-                                <div className="flex items-start justify-between mb-4">
-                                    <contact.icon className="w-6 h-6 text-gray-900 dark:text-white" />
-                                    <ArrowUpRight className="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors" />
+                                <div className="flex items-start justify-between mb-3 sm:mb-4">
+                                    <contact.icon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 dark:text-white" />
+                                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors" />
                                 </div>
-                                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                                <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-0.5 sm:mb-1">
                                     {contact.label}
                                 </h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 break-all">
                                     {contact.value}
                                 </p>
                             </a>

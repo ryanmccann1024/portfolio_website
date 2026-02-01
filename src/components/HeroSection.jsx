@@ -53,21 +53,21 @@ function InteractiveTerminal() {
 
     return (
         <div
-            className="bg-[#1e1e2e] rounded-xl overflow-hidden border border-[#313244] shadow-2xl w-[480px]"
+            className="bg-[#1e1e2e] rounded-xl overflow-hidden border border-[#313244] shadow-2xl w-full max-w-[480px]"
             onClick={() => inputRef.current?.focus()}
         >
             {/* Header */}
-            <div className="flex items-center gap-2 px-4 py-3 bg-[#181825] border-b border-[#313244]">
-                <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-[#f38ba8]" />
-                    <div className="w-3 h-3 rounded-full bg-[#f9e2af]" />
-                    <div className="w-3 h-3 rounded-full bg-[#a6e3a1]" />
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 bg-[#181825] border-b border-[#313244]">
+                <div className="flex gap-1.5 sm:gap-2">
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#f38ba8]" />
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#f9e2af]" />
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#a6e3a1]" />
                 </div>
-                <span className="flex-1 text-center text-xs text-[#6c7086] font-mono">~/ryan</span>
+                <span className="flex-1 text-center text-[10px] sm:text-xs text-[#6c7086] font-mono">~/ryan</span>
             </div>
 
             {/* Content */}
-            <div ref={terminalRef} className="p-4 font-mono text-sm leading-relaxed h-[280px] overflow-y-auto">
+            <div ref={terminalRef} className="p-3 sm:p-4 font-mono text-xs sm:text-sm leading-relaxed h-[200px] sm:h-[280px] overflow-y-auto">
                 {history.map((item, i) => (
                     <div key={i} className="mb-2">
                         {item.type === "command" && (
@@ -112,21 +112,21 @@ export default function HeroSection() {
     const y = useTransform(scrollYProgress, [0, 0.5], [0, -50]);
 
     return (
-        <section ref={containerRef} className="relative min-h-[140vh]">
+        <section ref={containerRef} className="relative min-h-screen lg:min-h-[140vh]">
             <motion.div
                 style={{ opacity, y }}
-                className="sticky top-0 min-h-screen flex items-center"
+                className="lg:sticky lg:top-0 min-h-screen flex items-center py-20 lg:py-0"
             >
-                <div className="w-full max-w-7xl mx-auto px-8 lg:px-16">
-                    <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-20">
 
                         {/* Left - Text */}
-                        <div className="flex-1 max-w-2xl">
+                        <div className="flex-1 max-w-2xl text-center lg:text-left">
                             <motion.h1
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5 }}
-                                className="text-6xl sm:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white mb-8 tracking-tight leading-[1.1]"
+                                className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 lg:mb-8 tracking-tight leading-[1.1]"
                             >
                                 I'm Ryan
                             </motion.h1>
@@ -135,9 +135,9 @@ export default function HeroSection() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.1, duration: 0.5 }}
-                                className="text-2xl sm:text-3xl text-gray-500 dark:text-gray-400 mb-10 leading-relaxed"
+                                className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-500 dark:text-gray-400 mb-6 sm:mb-8 lg:mb-10 leading-relaxed"
                             >
-                                Software engineer who loves<br />
+                                Software engineer who loves<br className="hidden sm:block" />
                                 <span className="text-emerald-500 dark:text-emerald-400 font-medium">
                                     open source
                                 </span>.
@@ -147,11 +147,11 @@ export default function HeroSection() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2, duration: 0.5 }}
-                                className="flex items-center gap-4"
+                                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4"
                             >
                                 <a
                                     href="#projects"
-                                    className="px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-base font-semibold hover:opacity-90 transition"
+                                    className="w-full sm:w-auto px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl text-sm sm:text-base font-semibold hover:opacity-90 transition text-center"
                                 >
                                     View Projects
                                 </a>
@@ -159,7 +159,7 @@ export default function HeroSection() {
                                     href="https://github.com/ryanmccann1024/portfolio_website/blob/main/public/pdfs/Ryan_McCann_Resume_v4.pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl text-base font-semibold hover:opacity-90 transition"
+                                    className="w-full sm:w-auto px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl text-sm sm:text-base font-semibold hover:opacity-90 transition text-center"
                                 >
                                     Resume
                                 </a>
@@ -167,12 +167,12 @@ export default function HeroSection() {
 
                         </div>
 
-                        {/* Right - Terminal */}
+                        {/* Right - Terminal (hidden on mobile) */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2, duration: 0.6 }}
-                            className="flex-shrink-0"
+                            className="hidden md:block flex-shrink-0 w-full md:w-auto"
                         >
                             <InteractiveTerminal />
                         </motion.div>
@@ -183,7 +183,7 @@ export default function HeroSection() {
             {/* Scroll indicator */}
             <motion.div
                 style={{ opacity }}
-                className="absolute bottom-12 left-1/2 -translate-x-1/2"
+                className="absolute bottom-6 sm:bottom-12 left-1/2 -translate-x-1/2 hidden lg:block"
             >
                 <motion.div
                     animate={{ y: [0, 8, 0] }}

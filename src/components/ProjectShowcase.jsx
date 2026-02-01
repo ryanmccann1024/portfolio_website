@@ -134,30 +134,30 @@ function BrowserMockup({ image, title, isHovered }) {
 
 function ExpandedProjectContent({ project }) {
     return (
-        <div className="p-8 md:p-10">
+        <div className="p-5 sm:p-6 md:p-10">
             {/* Header - centered */}
-            <div className="mb-8 text-center">
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+            <div className="mb-6 sm:mb-8 text-center">
+                <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-1 sm:mb-2">
                     {project.subtitle}
                 </p>
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display">
                     {project.title}
                 </h2>
             </div>
 
             {/* Screenshot */}
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8">
                 <BrowserMockup image={project.image} title={project.title} isHovered={false} />
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-8 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8 p-3 sm:p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl">
                 {project.stats.map((stat) => (
                     <div key={stat.label} className="text-center">
-                        <div className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
+                        <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
                             {stat.value}
                         </div>
-                        <div className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
+                        <div className="text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-gray-400">
                             {stat.label}
                         </div>
                     </div>
@@ -165,47 +165,47 @@ function ExpandedProjectContent({ project }) {
             </div>
 
             {/* Problem & Solution */}
-            <div className="space-y-6 mb-8">
+            <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
                 <div>
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide mb-2">
+                    <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide mb-1 sm:mb-2">
                         Problem
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
                         {project.fullStory.problem}
                     </p>
                 </div>
                 <div>
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide mb-2">
+                    <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide mb-1 sm:mb-2">
                         Solution
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
                         {project.fullStory.solution}
                     </p>
                 </div>
             </div>
 
             {/* Impact */}
-            <div className="mb-8">
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide mb-3">
+            <div className="mb-6 sm:mb-8">
+                <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide mb-2 sm:mb-3">
                     Impact
                 </h3>
                 <ul className="space-y-2">
                     {project.fullStory.impact.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3">
+                        <li key={i} className="flex items-start gap-2 sm:gap-3">
                             <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
-                            <span className="text-gray-600 dark:text-gray-300">{item}</span>
+                            <span className="text-sm sm:text-base text-gray-600 dark:text-gray-300">{item}</span>
                         </li>
                     ))}
                 </ul>
             </div>
 
             {/* Tech + Links row */}
-            <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-gray-100 dark:border-slate-800">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-4 pt-4 sm:pt-6 border-t border-gray-100 dark:border-slate-800">
                 <div className="flex flex-wrap gap-2">
                     {project.tech.map((t) => (
                         <span
                             key={t}
-                            className="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 rounded-full"
+                            className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 rounded-full"
                         >
                             {t}
                         </span>
@@ -215,9 +215,9 @@ function ExpandedProjectContent({ project }) {
                     href={project.links.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-5 py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+                    className="flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-opacity"
                 >
-                    <Github size={16} />
+                    <Github size={14} className="sm:w-4 sm:h-4" />
                     GitHub
                 </a>
             </div>
@@ -232,26 +232,26 @@ export function ProjectCard({ project, index }) {
             className="group h-full"
             expandedContent={<ExpandedProjectContent project={project} />}
         >
-            <div className="p-6 h-full flex flex-col">
+            <div className="p-4 sm:p-5 lg:p-6 h-full flex flex-col">
                 {/* Browser mockup */}
-                <div className="mb-4">
+                <div className="mb-3 sm:mb-4">
                     <BrowserMockup image={project.image} title={project.title} />
                 </div>
 
                 {/* Title and subtitle */}
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white font-display mb-1">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white font-display mb-1">
                     {project.title}
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4">
                     {project.subtitle}
                 </p>
 
                 {/* Tech tags - pushed to bottom */}
-                <div className="flex flex-wrap gap-2 mt-auto">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-auto">
                     {project.tech.map((t) => (
                         <span
                             key={t}
-                            className="px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-slate-700/50 text-gray-600 dark:text-gray-400 rounded"
+                            className="px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium bg-gray-100 dark:bg-slate-700/50 text-gray-600 dark:text-gray-400 rounded"
                         >
                             {t}
                         </span>
@@ -273,20 +273,20 @@ export default function ProjectShowcase() {
     const headerOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
     return (
-        <section ref={containerRef} className="py-32 relative">
-            <div className="max-w-6xl mx-auto px-4">
+        <section ref={containerRef} className="py-16 sm:py-24 lg:py-32 relative">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
                 {/* Section header with parallax */}
                 <motion.div
                     style={{ y: headerY, opacity: headerOpacity }}
-                    className="mb-20 text-center"
+                    className="mb-10 sm:mb-16 lg:mb-20 text-center"
                 >
-                    <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white font-display">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white font-display">
                         <ScrollTextReveal text="Projects that ship" />
                     </h2>
                 </motion.div>
 
                 {/* Project grid with stagger */}
-                <ScrollStagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
+                <ScrollStagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
                     {projects.map((project, i) => (
                         <TiltOnScroll key={project.id}>
                             <ProjectCard project={project} index={i} />

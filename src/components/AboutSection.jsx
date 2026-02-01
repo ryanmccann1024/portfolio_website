@@ -96,13 +96,13 @@ function ExperienceModal() {
     };
 
     return (
-        <div className="p-8 md:p-12">
+        <div className="p-4 sm:p-6 md:p-12">
             {/* Header with gradient */}
-            <div className="text-center mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display mb-2">
+            <div className="text-center mb-6 sm:mb-10">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display mb-1 sm:mb-2">
                     Experience
                 </h2>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
                     Building systems that scale
                 </p>
             </div>
@@ -110,38 +110,38 @@ function ExperienceModal() {
             {/* Timeline */}
             <div className="relative">
                 {/* Vertical line */}
-                <div className="absolute left-[19px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-blue-500 via-purple-500 to-emerald-500 opacity-20 dark:opacity-30" />
+                <div className="absolute left-[15px] sm:left-[19px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-blue-500 via-purple-500 to-emerald-500 opacity-20 dark:opacity-30" />
 
-                <div className="space-y-8">
+                <div className="space-y-4 sm:space-y-8">
                     {experience.map((job, i) => (
-                        <div key={i} className="relative flex gap-6 group">
+                        <div key={i} className="relative flex gap-3 sm:gap-6 group">
                             {/* Timeline dot */}
                             <div className="relative z-10 flex-shrink-0">
-                                <div className={`w-10 h-10 rounded-xl ${dotColorMap[job.color]} bg-opacity-10 dark:bg-opacity-20 flex items-center justify-center text-lg shadow-lg shadow-${job.color}-500/20`}>
+                                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl ${dotColorMap[job.color]} bg-opacity-10 dark:bg-opacity-20 flex items-center justify-center text-sm sm:text-lg shadow-lg shadow-${job.color}-500/20`}>
                                     {job.icon}
                                 </div>
                             </div>
 
                             {/* Content card */}
                             <div className="flex-1 pb-2">
-                                <div className="p-5 rounded-2xl bg-gray-50 dark:bg-slate-800/50 border border-gray-100 dark:border-slate-700/50 transition-all duration-300 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20">
-                                    <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
+                                <div className="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-slate-800/50 border border-gray-100 dark:border-slate-700/50 transition-all duration-300 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-black/20">
+                                    <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-start sm:justify-between gap-1 sm:gap-2 mb-2 sm:mb-3">
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                                            <h3 className="text-sm sm:text-lg font-bold text-gray-900 dark:text-white">
                                                 {job.title}
                                             </h3>
-                                            <p className={`text-sm font-medium bg-gradient-to-r ${colorMap[job.color]} bg-clip-text text-transparent`}>
+                                            <p className={`text-xs sm:text-sm font-medium bg-gradient-to-r ${colorMap[job.color]} bg-clip-text text-transparent`}>
                                                 {job.company}
                                             </p>
                                         </div>
-                                        <span className="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 rounded-full">
+                                        <span className="px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-medium bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 rounded-full w-fit">
                                             {job.period}
                                         </span>
                                     </div>
-                                    <ul className="space-y-2">
+                                    <ul className="space-y-1.5 sm:space-y-2">
                                         {job.bullets.map((bullet, j) => (
-                                            <li key={j} className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
-                                                <span className={`mt-1.5 w-1.5 h-1.5 rounded-full ${dotColorMap[job.color]} flex-shrink-0`} />
+                                            <li key={j} className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                                                <span className={`mt-1 sm:mt-1.5 w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${dotColorMap[job.color]} flex-shrink-0`} />
                                                 {bullet}
                                             </li>
                                         ))}
@@ -158,54 +158,54 @@ function ExperienceModal() {
 
 function EducationModal() {
     return (
-        <div className="p-8 md:p-12">
+        <div className="p-4 sm:p-6 md:p-12">
             {/* Header */}
-            <div className="text-center mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display mb-2">
+            <div className="text-center mb-6 sm:mb-10">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display mb-1 sm:mb-2">
                     Education
                 </h2>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
                     University of Massachusetts Lowell
                 </p>
             </div>
 
             {/* Education cards */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
                 {education.map((edu, i) => (
                     <div
                         key={i}
-                        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800/80 dark:to-slate-800/40 border border-gray-200/50 dark:border-slate-700/50"
+                        className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800/80 dark:to-slate-800/40 border border-gray-200/50 dark:border-slate-700/50"
                     >
                         {/* Accent gradient */}
                         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500" />
 
-                        <div className="p-6">
-                            <div className="flex items-start gap-4">
+                        <div className="p-4 sm:p-6">
+                            <div className="flex items-start gap-3 sm:gap-4">
                                 {/* Icon */}
-                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 dark:from-purple-500/20 dark:to-blue-500/20 flex items-center justify-center text-2xl flex-shrink-0">
+                                <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 dark:from-purple-500/20 dark:to-blue-500/20 flex items-center justify-center text-lg sm:text-2xl flex-shrink-0">
                                     {edu.icon}
                                 </div>
 
                                 {/* Content */}
                                 <div className="flex-1 min-w-0">
-                                    <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
-                                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                                    <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-start sm:justify-between gap-1 sm:gap-3 mb-2">
+                                        <h3 className="text-sm sm:text-lg font-bold text-gray-900 dark:text-white">
                                             {edu.degree}
                                         </h3>
-                                        <span className="px-3 py-1 text-xs font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full shadow-lg shadow-emerald-500/20">
+                                        <span className="px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full shadow-lg shadow-emerald-500/20 w-fit">
                                             {edu.year}
                                         </span>
                                     </div>
 
                                     {/* Highlight badge */}
-                                    <div className="inline-flex items-center gap-1.5 px-3 py-1 mb-3 text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full">
-                                        <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <div className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 mb-2 sm:mb-3 text-[10px] sm:text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-full">
+                                        <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                         </svg>
                                         {edu.highlight}
                                     </div>
 
-                                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                                         {edu.detail}
                                     </p>
                                 </div>
@@ -239,38 +239,38 @@ function SkillsModal() {
     };
 
     return (
-        <div className="p-8 md:p-12">
+        <div className="p-4 sm:p-6 md:p-12">
             {/* Header */}
-            <div className="text-center mb-10">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display mb-2">
+            <div className="text-center mb-6 sm:mb-10">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display mb-1 sm:mb-2">
                     Skills
                 </h2>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
                     Tools and technologies I work with
                 </p>
             </div>
 
             {/* Skills grid */}
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {Object.entries(skills).map(([category, items]) => (
                     <div
                         key={category}
-                        className={`p-5 rounded-2xl border ${categoryBgColors[category]} transition-all duration-300 hover:scale-[1.02]`}
+                        className={`p-3 sm:p-5 rounded-xl sm:rounded-2xl border ${categoryBgColors[category]} transition-all duration-300 hover:scale-[1.02]`}
                     >
                         {/* Category header */}
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="text-xl">{categoryIcons[category]}</span>
-                            <h3 className={`text-sm font-bold uppercase tracking-wide bg-gradient-to-r ${categoryColors[category]} bg-clip-text text-transparent`}>
+                        <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-4">
+                            <span className="text-base sm:text-xl">{categoryIcons[category]}</span>
+                            <h3 className={`text-xs sm:text-sm font-bold uppercase tracking-wide bg-gradient-to-r ${categoryColors[category]} bg-clip-text text-transparent`}>
                                 {category}
                             </h3>
                         </div>
 
                         {/* Skills */}
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
                             {items.map((skill) => (
                                 <span
                                     key={skill}
-                                    className="px-3 py-1.5 bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm text-gray-700 dark:text-gray-200 rounded-lg text-sm font-medium border border-gray-200/50 dark:border-slate-600/50 shadow-sm"
+                                    className="px-2 sm:px-3 py-1 sm:py-1.5 bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm text-gray-700 dark:text-gray-200 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium border border-gray-200/50 dark:border-slate-600/50 shadow-sm"
                                 >
                                     {skill}
                                 </span>
@@ -333,20 +333,20 @@ export default function AboutSection() {
     const headerOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
     return (
-        <section ref={containerRef} className="py-32 bg-gray-50 dark:bg-slate-900/50">
-            <div className="max-w-6xl mx-auto px-4">
+        <section ref={containerRef} className="py-16 sm:py-24 lg:py-32 bg-gray-50 dark:bg-slate-900/50">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
                 {/* Section header */}
                 <motion.div
                     style={{ y: headerY, opacity: headerOpacity }}
-                    className="mb-20 text-center"
+                    className="mb-10 sm:mb-16 lg:mb-20 text-center"
                 >
-                    <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white font-display">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white font-display">
                         <ScrollTextReveal text="About Me" />
                     </h2>
                 </motion.div>
 
                 {/* Cards grid - same as projects */}
-                <ScrollStagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
+                <ScrollStagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 auto-rows-fr">
                     {cards.map((card) => (
                         <TiltOnScroll key={card.id}>
                             <DepthCard
@@ -354,14 +354,14 @@ export default function AboutSection() {
                                 className="h-full"
                                 expandedContent={card.modal}
                             >
-                                <div className="p-6 h-full flex flex-col">
-                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white font-display mb-4">
+                                <div className="p-4 sm:p-5 lg:p-6 h-full flex flex-col">
+                                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white font-display mb-3 sm:mb-4">
                                         {card.title}
                                     </h3>
-                                    <ul className="space-y-2">
+                                    <ul className="space-y-1.5 sm:space-y-2">
                                         {card.bullets.map((bullet, i) => (
-                                            <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                                                <span className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                                            <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                                                <span className={`mt-1 sm:mt-1.5 w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full flex-shrink-0 ${
                                                     card.color === "blue" ? "bg-blue-500" :
                                                     card.color === "purple" ? "bg-purple-500" :
                                                     "bg-emerald-500"
