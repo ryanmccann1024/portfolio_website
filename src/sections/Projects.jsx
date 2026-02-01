@@ -1,16 +1,18 @@
-// Highlight Projects – clickable cards
-// Ryan McCann – June 2025
+// Projects section with modal details and enhanced animations
+// Ryan McCann – Portfolio Revamp
 
-import {GithubIcon, ExternalLinkIcon, PlayCircle} from "lucide-react";
-import {motion} from "framer-motion";
+import { GithubIcon, ExternalLinkIcon, ChevronRight, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import fusionImg from "../assets/projects/fusion.png";
 import podmanImg from "../assets/projects/podman.png";
 import reactImg from "../assets/projects/react.png";
-import {useState, useEffect} from "react";
 import Spinner from "../components/Spinner";
+import DepthCard from "../components/DepthCard";
+import { staggerContainer, staggerItem, customEasing } from "../constants/animations";
 
 /* ── Flicker-Free Image Wrapper ───────────────────────────── */
-function CardImage({src, alt}) {
+function CardImage({ src, alt, className = "" }) {
     const [loaded, setLoaded] = useState(false);
     const [visible, setVisible] = useState(false);
 
@@ -22,21 +24,21 @@ function CardImage({src, alt}) {
     }, [loaded]);
 
     return (
-        <div className="relative h-48 w-full overflow-hidden">
+        <div className={`relative overflow-hidden ${className}`}>
             <img
                 src={src}
                 alt={alt}
                 loading="eager"
                 decoding="async"
                 onLoad={() => setLoaded(true)}
-                className={`h-full w-full object-cover transition duration-300 group-hover:scale-105 ${
+                className={`h-full w-full object-cover transition duration-500 ${
                     visible ? "opacity-100" : "opacity-0"
                 }`}
-                style={{willChange: "opacity", backfaceVisibility: "hidden"}}
+                style={{ willChange: "opacity, transform", backfaceVisibility: "hidden" }}
             />
             {!visible && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-slate-800">
-                    <Spinner small/>
+                    <Spinner small />
                 </div>
             )}
         </div>
@@ -47,154 +49,253 @@ function CardImage({src, alt}) {
 const projects = [
     {
         title: "FUSION – Optical-Network RL Simulator",
+        shortTitle: "FUSION",
         img: fusionImg,
-        tech: [
-            "Python",
-            "Reinforcement Learning",
-            "PyTorch",
-            "Gymnasium",
-            "Optical Networks",
-            "Slurm",
+        tech: ["Python", "Reinforcement Learning", "PyTorch", "Gymnasium", "Optical Networks", "Slurm"],
+        blurb: "Open-source optical-network simulator that accelerates RL research. 10+ ★ on GitHub, under NSF POSE review for $300k grant.",
+        fullDescription: "Authored FUSION, an open-source optical-network simulator that accelerates RL research. Now 10+ ★ on GitHub, 5 forks, under NSF POSE review for a $300k grant (decision by 2026). Features crosstalk-aware grooming and SDN/EON APIs.",
+        highlights: [
+            "10+ stars on GitHub, 5 forks",
+            "Under NSF POSE review for $300k grant",
+            "Used by researchers at 4+ institutions (AT&T, Red Hat, MIT)",
+            "2,000+ automated tests in CI/CD pipeline",
+            "Published in peer-reviewed IEEE paper",
+            "Features crosstalk-aware grooming and SDN/EON APIs",
         ],
-        blurb:
-            "Authored FUSION, an open-source optical-network simulator that accelerates RL research. Now 10+ ★ on GitHub, 5 forks, under NSF POSE review for a $300 k grant (decision by 2026). Features crosstalk-aware grooming and SDN/EON APIs.",
         repo: "https://github.com/SDNNetSim/FUSION",
         demo: null,
         status: "launched",
+        color: "blue",
     },
     {
         title: "Podman HPC Extensions (upcoming)",
+        shortTitle: "Podman HPC",
         img: podmanImg,
         tech: ["Go", "Podman", "HPC", "GPU", "SquashFS", "CI/CD"],
-        blurb:
-            "Collaborating with Red Hat’s Podman team (July 2025) to prototype GPU-aware scheduling and SquashFS image support for multi-TB scientific workloads. First design doc submitted; initial PR targeting fuse-overlayfs masking lands August 2025.",
+        blurb: "Collaborating with Red Hat's Podman team to prototype GPU-aware scheduling and SquashFS image support.",
+        fullDescription: "Collaborating with Red Hat's Podman team to prototype GPU-aware scheduling and SquashFS image support for multi-TB scientific workloads. First design doc submitted; initial PR targeting fuse-overlayfs masking.",
+        highlights: [
+            "GPU-aware scheduling for HPC workloads",
+            "SquashFS image support for multi-TB scientific data",
+            "Collaborating directly with Red Hat engineers",
+            "Cross-platform integration tests (Fedora, Windows, macOS)",
+            "Targeting production container runtime improvements",
+        ],
         repo: "https://github.com/NERSC/podman-hpc",
         demo: null,
         status: "in-progress",
+        color: "orange",
     },
     {
-        title: "Scalable Blog w/ Notion CMS + GPT",
+        title: "AI Resume Builder",
+        shortTitle: "AI Resume Builder",
         img: reactImg,
-        tech: [
-            "React",
-            "Notion API",
-            "react-notion-x",
-            "Framer Motion",
-            "Tailwind",
-            "Splitbee",
+        tech: ["React", "OpenAI API", "Firebase", "Stripe", "Vercel"],
+        blurb: "Production GenAI app for role-specific resumes and cover letters via guided prompt flows.",
+        fullDescription: "Built and shipped a production GenAI application using the OpenAI API to generate structured, role-specific resumes and cover letters via guided prompt flows. Implemented end-to-end production infrastructure with robust handling of API failures and latency.",
+        highlights: [
+            "Production GenAI app using OpenAI API",
+            "Firebase auth and data storage",
+            "Stripe billing (checkout and webhooks)",
+            "Deployed on Vercel",
+            "Robust handling of API failures and latency",
+            "Guided prompt flows for structured output",
         ],
-        blurb:
-            "Launched this blog platform in < 1 week with zero CMS experience, guided by ChatGPT. Architecture designed in < 24 h. Notion handles content with instant sync, dark-mode support, dynamic routing, and animated UX. SEO & mobile-ready.",
         repo: "https://github.com/ryanmccann1024/portfolio_website",
         demo: null,
         status: "launched",
+        color: "purple",
     },
 ];
 
-/* ── COMPONENT ─────────────────────────────────────────── */
-export default function Projects() {
+/* ── PROJECT MODAL CONTENT ─────────────────────────────── */
+function ProjectModal({ project }) {
+    const statusBgColors = {
+        launched: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+        "in-progress": "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+    };
+
     return (
-        <section id="projects" className="bg-gray-50 py-24 dark:bg-slate-900">
-            <motion.div
-                initial={{opacity: 0, y: 40}}
-                whileInView={{opacity: 1, y: 0}}
-                viewport={{once: true, amount: 0.3}}
-                transition={{duration: 0.5}}
-            >
-                <div className="mx-auto max-w-6xl px-4">
-                    <h2 className="mb-12 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50">
-                        Highlight Projects
-                    </h2>
+        <div className="p-0">
+            {/* Hero image */}
+            <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
+                <CardImage src={project.img} alt={project.title} className="h-full w-full" />
+                <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 via-transparent to-transparent" />
 
-                    <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-                        {projects.map(
-                            ({title, img, tech, blurb, repo, demo, status}) => {
-                                const target = demo || repo;
-                                const isClickable = Boolean(target);
+                {/* Status badge */}
+                <div className={`absolute top-4 right-4 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide ${statusBgColors[project.status]}`}>
+                    {project.status.replace("-", " ")}
+                </div>
+            </div>
 
-                                return (
-                                    <motion.article
-                                        key={title}
-                                        onClick={() =>
-                                            isClickable && window.open(target, "_blank", "noopener")
-                                        }
-                                        role={isClickable ? "link" : undefined}
-                                        tabIndex={isClickable ? 0 : undefined}
-                                        className={`group relative cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 ${
-                                            !isClickable ? "cursor-default" : ""
-                                        }`}
-                                    >
-                                        {/* screenshot */}
-                                        <CardImage src={img} alt={`${title} screenshot`}/>
+            {/* Content */}
+            <div className="p-8 md:p-10 -mt-8 relative">
+                {/* Title */}
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white font-display mb-3">
+                    {project.title}
+                </h2>
 
-                                        {/* overlay play icon if demo */}
-                                        {demo && (
-                                            <PlayCircle
-                                                className="absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition group-hover:opacity-90"
-                                            />
-                                        )}
+                {/* Description */}
+                <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    {project.fullDescription}
+                </p>
 
-                                        {/* status badge */}
-                                        <span
-                                            className="absolute right-2 top-2 rounded-full bg-blue-600 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-white"
-                                        >
-                                            {status}
-                                        </span>
+                {/* Highlights */}
+                <div className="mb-6">
+                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-2">
+                        <Sparkles className="w-4 h-4" />
+                        Highlights
+                    </h3>
+                    <ul className="space-y-2">
+                        {project.highlights.map((highlight, i) => (
+                            <li key={i} className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300">
+                                <ChevronRight className="w-4 h-4 mt-0.5 text-blue-500 flex-shrink-0" />
+                                {highlight}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
 
-                                        {/* content */}
-                                        <div className="p-6">
-                                            <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
-                                                {title}
-                                            </h3>
-                                            <p className="mb-4 text-sm text-gray-700 dark:text-gray-300">
-                                                {blurb}
-                                            </p>
-
-                                            <div className="mb-4 flex flex-wrap gap-2">
-                                                {tech.map((t) => (
-                                                    <span
-                                                        key={t}
-                                                        className="rounded-full border border-blue-600/30 bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:border-blue-400/30 dark:bg-blue-900/40 dark:text-blue-300"
-                                                    >
-                                                        {t}
-                                                    </span>
-                                                ))}
-                                            </div>
-
-                                            <div className="flex gap-4">
-                                                {repo && (
-                                                    <a
-                                                        href={repo}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        aria-label="GitHub repo"
-                                                        className="text-gray-600 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-                                                        onClick={(e) => e.stopPropagation()}
-                                                    >
-                                                        <GithubIcon size={20}/>
-                                                    </a>
-                                                )}
-                                                {demo && (
-                                                    <a
-                                                        href={demo}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        aria-label="Live demo"
-                                                        className="text-gray-600 transition hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
-                                                        onClick={(e) => e.stopPropagation()}
-                                                    >
-                                                        <ExternalLinkIcon size={20}/>
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </motion.article>
-                                );
-                            }
-                        )}
+                {/* Tech stack */}
+                <div className="mb-8">
+                    <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+                        Tech Stack
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                        {project.tech.map((t) => (
+                            <span
+                                key={t}
+                                className="px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-slate-700"
+                            >
+                                {t}
+                            </span>
+                        ))}
                     </div>
                 </div>
-            </motion.div>
+
+                {/* Actions */}
+                <div className="flex flex-wrap gap-3">
+                    {project.repo && (
+                        <a
+                            href={project.repo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium text-sm hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+                        >
+                            <GithubIcon size={18} />
+                            View on GitHub
+                        </a>
+                    )}
+                    {project.demo && (
+                        <a
+                            href={project.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-500 text-white font-medium text-sm hover:bg-blue-600 transition-colors"
+                        >
+                            <ExternalLinkIcon size={18} />
+                            Live Demo
+                        </a>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* ── PROJECT CARD PREVIEW ─────────────────────────────── */
+function ProjectCardContent({ project }) {
+    const statusColors = {
+        launched: "bg-emerald-500",
+        "in-progress": "bg-amber-500",
+    };
+
+    return (
+        <div className="h-full flex flex-col">
+            {/* Image */}
+            <div className="relative h-40 overflow-hidden rounded-t-2xl -mx-[1px] -mt-[1px]">
+                <CardImage src={project.img} alt={project.title} className="h-full w-full group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+
+                {/* Status badge */}
+                <span className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide text-white shadow-lg ${statusColors[project.status]}`}>
+                    {project.status.replace("-", " ")}
+                </span>
+            </div>
+
+            {/* Content */}
+            <div className="p-5 flex-1 flex flex-col">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white font-display mb-2">
+                    {project.shortTitle}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 flex-1">
+                    {project.blurb}
+                </p>
+
+                {/* Tech preview */}
+                <div className="flex flex-wrap gap-1.5">
+                    {project.tech.slice(0, 3).map((t) => (
+                        <span
+                            key={t}
+                            className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-200/50 dark:border-blue-700/50"
+                        >
+                            {t}
+                        </span>
+                    ))}
+                    {project.tech.length > 3 && (
+                        <span className="px-2 py-0.5 rounded-md text-[10px] font-medium text-gray-500 dark:text-gray-400">
+                            +{project.tech.length - 3}
+                        </span>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/* ── PROJECTS COMPONENT ─────────────────────────────────── */
+export default function Projects() {
+    const colorMap = {
+        blue: "blue",
+        orange: "orange",
+        purple: "purple",
+    };
+
+    return (
+        <section id="projects" className="bg-gray-50 py-24 dark:bg-slate-900">
+            <div className="mx-auto max-w-6xl px-4">
+                {/* Heading */}
+                <motion.h2
+                    initial={{ opacity: 0, y: 40, filter: "blur(4px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.5, ease: customEasing }}
+                    className="mb-12 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50 font-display"
+                >
+                    Highlight Projects
+                </motion.h2>
+
+                {/* Staggered project grid */}
+                <motion.div
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.1 }}
+                    className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+                >
+                    {projects.map((project) => (
+                        <motion.div key={project.title} variants={staggerItem}>
+                            <DepthCard
+                                glowColor={colorMap[project.color]}
+                                className="h-full"
+                                expandedContent={<ProjectModal project={project} />}
+                            >
+                                <ProjectCardContent project={project} />
+                            </DepthCard>
+                        </motion.div>
+                    ))}
+                </motion.div>
+            </div>
         </section>
     );
 }

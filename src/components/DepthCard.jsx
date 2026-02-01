@@ -139,45 +139,72 @@ function ExpandedView({ isOpen, onClose, children }) {
     // Use portal to render modal at document body level
     if (typeof document === "undefined") return null;
 
+    // Custom easing for smooth, modern feel
+    const smoothEasing = [0.16, 1, 0.3, 1];
+
     return createPortal(
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
             {isOpen && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+                    transition={{ duration: 0.3, ease: smoothEasing }}
+                    className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-8"
                     onClick={onClose}
                 >
-                    {/* Backdrop */}
+                    {/* Backdrop with blur */}
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                        initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                        animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
+                        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                        transition={{ duration: 0.4, ease: smoothEasing }}
+                        className="absolute inset-0 bg-black/70"
                     />
 
-                    {/* Modal */}
+                    {/* Modal container with gradient border */}
                     <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.98, y: 10 }}
+                        transition={{ duration: 0.35, ease: smoothEasing }}
                         onClick={(e) => e.stopPropagation()}
-                        className="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-2xl shadow-2xl"
+                        className="relative w-full max-w-3xl"
                     >
-                        {/* Close button */}
-                        <button
-                            onClick={onClose}
-                            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
-                        >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                        {/* Gradient border glow */}
+                        <div className="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-blue-500/30 via-purple-500/20 to-cyan-500/30 opacity-60 blur-sm" />
+                        <div className="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-blue-500/40 via-purple-500/30 to-cyan-500/40" />
 
-                        {children}
+                        {/* Modal content */}
+                        <div className="relative rounded-3xl bg-white dark:bg-slate-900 shadow-2xl shadow-black/20 overflow-hidden">
+                            {/* Inner glow effect */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
+
+                            {/* Close button */}
+                            <motion.button
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ delay: 0.1, duration: 0.2, ease: smoothEasing }}
+                                onClick={onClose}
+                                className="absolute top-4 right-4 z-20 p-2.5 rounded-full bg-gray-100/80 dark:bg-slate-800/80 backdrop-blur-sm text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700 hover:text-gray-700 dark:hover:text-gray-200 transition-all duration-200 hover:scale-105"
+                            >
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </motion.button>
+
+                            {/* Scrollable content with fade edges */}
+                            <div className="max-h-[85vh] modal-scroll">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.1, duration: 0.3, ease: smoothEasing }}
+                                >
+                                    {children}
+                                </motion.div>
+                            </div>
+                        </div>
                     </motion.div>
                 </motion.div>
             )}
