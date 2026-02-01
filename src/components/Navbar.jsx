@@ -71,7 +71,7 @@ export default function Navbar() {
                                 Blog
                             </NavLink>
                             <a
-                                href="https://github.com/ryanmccann1024/portfolio_website/blob/main/public/pdfs/Ryan_McCann_Resume_v4.pdf"
+                                href="/pdfs/Ryan_McCann_Resume.pdf"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
@@ -186,7 +186,7 @@ export default function Navbar() {
                                     Blog
                                 </NavLink>
                                 <a
-                                    href="https://github.com/ryanmccann1024/portfolio_website/blob/main/public/pdfs/Ryan_McCann_Resume_v4.pdf"
+                                    href="/pdfs/Ryan_McCann_Resume.pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"

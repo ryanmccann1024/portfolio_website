@@ -99,6 +99,62 @@ html {
     animation: blink 1s step-end infinite;
 }
 
+/* Glitch text effect */
+@keyframes glitch-1 {
+    0%, 100% {
+        clip-path: inset(0 0 0 0);
+        transform: translate(0);
+    }
+    20% {
+        clip-path: inset(20% 0 60% 0);
+        transform: translate(-3px, 2px);
+    }
+    40% {
+        clip-path: inset(50% 0 30% 0);
+        transform: translate(3px, -1px);
+    }
+    60% {
+        clip-path: inset(70% 0 10% 0);
+        transform: translate(-2px, 1px);
+    }
+    80% {
+        clip-path: inset(10% 0 80% 0);
+        transform: translate(2px, -2px);
+    }
+}
+
+@keyframes glitch-2 {
+    0%, 100% {
+        clip-path: inset(0 0 0 0);
+        transform: translate(0);
+    }
+    20% {
+        clip-path: inset(60% 0 20% 0);
+        transform: translate(3px, -1px);
+    }
+    40% {
+        clip-path: inset(30% 0 50% 0);
+        transform: translate(-2px, 2px);
+    }
+    60% {
+        clip-path: inset(10% 0 70% 0);
+        transform: translate(2px, 1px);
+    }
+    80% {
+        clip-path: inset(80% 0 5% 0);
+        transform: translate(-3px, -1px);
+    }
+}
+
+.animate-glitch-1 {
+    animation: glitch-1 3s infinite linear;
+}
+
+.animate-glitch-2 {
+    animation: glitch-2 3s infinite linear;
+    animation-delay: 0.1s;
+}
+
 /* Custom base styles */
 @layer base {
     body {

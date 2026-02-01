@@ -23,7 +23,7 @@ const commands = [
     { id: "home", label: "Go Home", icon: Home, action: "navigate", path: "/" },
     { id: "blog", label: "Read Blog", icon: FileText, action: "navigate", path: "/blog" },
     { id: "projects", label: "View Projects", icon: Briefcase, action: "scroll", target: "#projects" },
-    { id: "resume", label: "Download Resume", icon: Download, action: "link", url: "https://github.com/ryanmccann1024/portfolio_website/blob/main/public/pdfs/Ryan_McCann_Resume_v4.pdf" },
+    { id: "resume", label: "Download Resume", icon: Download, action: "link", url: "/pdfs/Ryan_McCann_Resume.pdf" },
     { id: "github", label: "Open GitHub", icon: Github, action: "link", url: "https://github.com/ryanmccann1024" },
     { id: "linkedin", label: "Open LinkedIn", icon: Linkedin, action: "link", url: "https://www.linkedin.com/in/ryanjmccann/" },
     { id: "email", label: "Send Email", icon: Mail, action: "link", url: "mailto:ryanjohnmccann@gmail.com" },

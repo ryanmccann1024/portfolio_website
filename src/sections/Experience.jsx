@@ -1,8 +1,9 @@
-// Experience & Education section with Scholarships & Continuous Learning
-// Ryan McCann – June 2025
+// Experience & Education section with enhanced timeline animations
+// Ryan McCann – Portfolio Revamp
 
-import {motion} from "framer-motion";
-import {Briefcase, GraduationCap, School, Award, Book} from "lucide-react";
+import { motion } from "framer-motion";
+import { Briefcase, GraduationCap, School, Award, Book } from "lucide-react";
+import { timelineItem, staggerContainer, customEasing } from "../constants/animations";
 
 /***** EXPERIENCE DATA *****/
 const experience = [
@@ -14,7 +15,7 @@ const experience = [
         bullets: [
             "Integrated reinforcement learning into an open-source optical-network simulator, boosting dynamic efficiency by 25%.",
             "Managed 80+ PRs across a 2,000-commit code base while coordinating a 5-person team via GitHub Actions & JIRA.",
-            "Published 3 IEEE conference papers; journal submission on interpretable deep RL for optical routing in progress (Summer 2025).",
+            "Published 3 IEEE conference papers; journal submission on interpretable deep RL for optical routing in progress.",
             "Presented research in Spanish at IEEE Latin-American Comms 2024, demonstrating bilingual remote-ready skills.",
         ],
     },
@@ -35,10 +36,9 @@ const experience = [
         period: "Summers 2019 & 2020",
         icon: Briefcase,
         bullets: [
-            "Developed Python pipelines to compute similarity across 300+ drugs and their tolerance distributions, used by medical doctors for treatment decisions.",
+            "Developed Python pipelines to compute similarity across 300+ drugs and their tolerance distributions.",
             "Queried large-scale Gene Expression APIs; reduced data-prep latency via MongoDB caching.",
             "Squashed 30 unit-test bugs to stabilise a mission-critical NLP library for 100+ internal devs.",
-            "Thrived in a high-growth start-up.",
         ],
     },
 ];
@@ -52,9 +52,9 @@ const education = [
         icon: GraduationCap,
         bullets: [
             "Full fellowship – covers M.S. + Ph.D. stipend & benefits; 3.7 GPA.",
-            "Research: disaster-aware RL for elastic optical networks; passed qualifier with survey on RL-guided failure mitigation.",
-            "Redesigned Network Design course to include LLM-assisted routing labs; teaching assistant for 200+ students.",
-            "Co-authored 2 IEEE papers; organising-committee member for 2025 Optical-AI Workshop.",
+            "Research: disaster-aware RL for elastic optical networks.",
+            "Redesigned Network Design course to include LLM-assisted routing labs.",
+            "Organising-committee member for 2025 Optical-AI Workshop.",
         ],
     },
     {
@@ -63,10 +63,9 @@ const education = [
         period: "2022 – 2023 (18 months)",
         icon: GraduationCap,
         bullets: [
-            "Thesis: Q-learning routing improved optical-network routing by 18 %.",
-            "Founded lab’s first open-source optical-network simulator (Python) – now 10+ GitHub stars.",
+            "Thesis: Q-learning routing improved optical-network routing by 18%.",
+            "Founded lab's first open-source optical-network simulator – now 10+ GitHub stars.",
             "Completed degree 6 months early while TA-ing core Internet-protocols course.",
-            "Advanced electives: Reinforcement Learning, Linux Kernel Development, Verilog/VHDL synthesis.",
         ],
     },
     {
@@ -76,10 +75,8 @@ const education = [
         icon: School,
         bullets: [
             "3.9 GPA | Honors College | Tau Beta Pi & IEEE student-chapter member.",
-            "Capstone: built student-friendly Fedora distro – featured in UML Engineering Magazine (Spring 2022).",
-            "Led Microprocessor Systems Design lab of 2 peers.",
-            "Founded Student Volunteers for Sustainability; secured Dean-level backing for campus food-quality initiative; promoted from food-pantry bagger to keyholder managing inventory at Central Food Ministry.",
-            "Volunteered as math tutor for Project LEARN, mentoring 20 third-graders remotely during COVID-19.",
+            "Capstone: built student-friendly Fedora distro – featured in UML Engineering Magazine.",
+            "Founded Student Volunteers for Sustainability; mentored 20 third-graders via Project LEARN.",
         ],
     },
 ];
@@ -103,105 +100,110 @@ const continuousLearning = [
     "MIT OCW Probability & Linear Algebra",
 ];
 
-/***** ANIMATION VARIANT *****/
-const variant = {
-    hidden: {opacity: 0, y: 40},
-    show: {opacity: 1, y: 0, transition: {ease: 'easeOut', duration: 0.4}},
-};
+/***** TIMELINE ITEM COMPONENT *****/
+function TimelineEntry({ title, org, period, bullets, icon: Icon, index }) {
+    return (
+        <motion.li
+            variants={timelineItem}
+            custom={index}
+            className="mb-10 ml-6 last:mb-0"
+        >
+            <span className="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 ring-4 ring-white dark:ring-slate-800">
+                <Icon size={12} className="text-white" />
+            </span>
+            <div className="mb-1 flex flex-wrap items-baseline gap-x-2">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 font-display">
+                    {title}
+                </h3>
+                <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    @{org}
+                </span>
+            </div>
+            <time className="mb-3 block text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                {period}
+            </time>
+            <ul className="list-none space-y-2 text-base text-gray-600 dark:text-gray-300">
+                {bullets.map((b, j) => (
+                    <li key={j} className="flex items-start gap-2">
+                        <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500" />
+                        <span>{b}</span>
+                    </li>
+                ))}
+            </ul>
+        </motion.li>
+    );
+}
 
 export default function ExperienceSection() {
     return (
-        <section id="experience" className="bg-white py-24 dark:bg-slate-700">
+        <section id="experience" className="bg-white py-24 dark:bg-slate-800">
             <div className="mx-auto max-w-4xl px-4">
-
                 {/* -------- EXPERIENCE -------- */}
-                <h2 className="mb-12 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50">
+                <motion.h2
+                    initial={{ opacity: 0, y: 40, filter: "blur(4px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.5, ease: customEasing }}
+                    className="mb-12 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50 font-display"
+                >
                     Experience
-                </h2>
-                <ol className="relative border-l border-gray-300 dark:border-slate-600">
-                    {experience.map(({title, org, period, bullets, icon: Icon}, i) => (
-                        <motion.li
-                            key={i}
-                            variants={variant}
-                            initial="hidden"
-                            whileInView="show"
-                            viewport={{once: true, amount: 0.3}}
-                            className="mb-12 ml-6"
-                        >
-              <span
-                  className="absolute -left-2.5 flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 ring-2 ring-white dark:ring-white">
-                <Icon size={12} className="text-white"/>
-              </span>
-                            <div className="mb-1 flex flex-wrap items-baseline gap-x-2">
-                                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
-                                <span className="text-sm text-gray-600 dark:text-gray-400">@{org}</span>
-                            </div>
-                            <time
-                                className="mb-3 block text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
-                                {period}
-                            </time>
-                            <ul className="list-disc pl-5 text-base font-medium text-gray-800 dark:text-gray-200">
-                                {bullets.map((b, j) => (
-                                    <li key={j} className="mb-1">{b}</li>
-                                ))}
-                            </ul>
-                        </motion.li>
+                </motion.h2>
+
+                <motion.ol
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.1 }}
+                    className="relative border-l-2 border-gray-200 dark:border-slate-600"
+                >
+                    {experience.map((item, i) => (
+                        <TimelineEntry key={i} {...item} index={i} />
                     ))}
-                </ol>
+                </motion.ol>
 
                 {/* -------- EDUCATION -------- */}
-                <h2 className="mb-12 mt-20 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50">
+                <motion.h2
+                    initial={{ opacity: 0, y: 40, filter: "blur(4px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.5, ease: customEasing }}
+                    className="mb-12 mt-20 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50 font-display"
+                >
                     Education
-                </h2>
-                <ol className="relative border-l border-gray-300 dark:border-slate-600">
-                    {education.map(({title, org, period, bullets, icon: Icon}, i) => (
-                        <motion.li
-                            key={i}
-                            variants={variant}
-                            initial="hidden"
-                            whileInView="show"
-                            viewport={{once: true, amount: 0.3}}
-                            className="mb-12 ml-6"
-                        >
-              <span
-                  className="absolute -left-2.5 flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 ring-2 ring-white dark:ring-white">
-                <Icon size={12} className="text-white"/>
-              </span>
-                            <div className="mb-1 flex flex-wrap items-baseline gap-x-2">
-                                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
-                                <span className="text-sm text-gray-600 dark:text-gray-400">@{org}</span>
-                            </div>
-                            <time
-                                className="mb-3 block text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
-                                {period}
-                            </time>
-                            <ul className="list-disc pl-5 text-base font-medium text-gray-800 dark:text-gray-200">
-                                {bullets.map((b, j) => (
-                                    <li key={j} className="mb-1">{b}</li>
-                                ))}
-                            </ul>
-                        </motion.li>
+                </motion.h2>
+
+                <motion.ol
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.1 }}
+                    className="relative border-l-2 border-gray-200 dark:border-slate-600"
+                >
+                    {education.map((item, i) => (
+                        <TimelineEntry key={i} {...item} index={i} />
                     ))}
-                </ol>
+                </motion.ol>
 
                 {/* -------- SCHOLARSHIPS & AWARDS -------- */}
                 <motion.div
-                    variants={variant}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{once: true, amount: 0.3}}
-                    className="mt-12"
+                    initial={{ opacity: 0, y: 30, filter: "blur(4px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.5, ease: customEasing }}
+                    className="mt-16"
                 >
-                    <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-50">
+                    <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-50 font-display">
                         Scholarships & Awards
                     </h3>
                     <div className="flex flex-col gap-4">
-                        {scholarships.map(({label, detail}) => (
+                        {scholarships.map(({ label, detail }) => (
                             <div
                                 key={label}
-                                className="flex items-start gap-3 rounded-lg border border-emerald-300/40 bg-emerald-50 px-4 py-3 dark:border-emerald-600/30 dark:bg-emerald-900/20"
+                                className="flex items-start gap-4 rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-4 shadow-sm dark:border-emerald-700/30 dark:from-emerald-900/20 dark:to-slate-800"
                             >
-                                <Award size={18} className="mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400"/>
+                                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-800/50">
+                                    <Award size={18} className="text-emerald-600 dark:text-emerald-400" />
+                                </div>
                                 <div>
                                     <p className="font-semibold text-emerald-800 dark:text-emerald-200">{label}</p>
                                     <p className="text-sm text-emerald-700 dark:text-emerald-300">{detail}</p>
@@ -213,22 +215,22 @@ export default function ExperienceSection() {
 
                 {/* -------- CONTINUOUS LEARNING -------- */}
                 <motion.div
-                    variants={variant}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{once: true, amount: 0.3}}
-                    className="mt-16"
+                    initial={{ opacity: 0, y: 30, filter: "blur(4px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.5, delay: 0.1, ease: customEasing }}
+                    className="mt-12"
                 >
-                    <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-50">
+                    <h3 className="mb-6 text-2xl font-bold text-gray-900 dark:text-gray-50 font-display">
                         Continuous Learning
                     </h3>
                     <ul className="grid gap-3 sm:grid-cols-2">
                         {continuousLearning.map((course) => (
                             <li
                                 key={course}
-                                className="flex items-center gap-2 rounded-md bg-purple-600/10 px-3 py-2 text-sm font-medium text-purple-800 dark:bg-purple-500/20 dark:text-purple-200"
+                                className="flex items-center gap-3 rounded-lg bg-gradient-to-r from-purple-50 to-white px-4 py-3 text-sm font-medium text-purple-800 shadow-sm transition hover:shadow-md dark:from-purple-900/30 dark:to-slate-800 dark:text-purple-200"
                             >
-                                <Book size={16} className="shrink-0"/>
+                                <Book size={16} className="flex-shrink-0 text-purple-600 dark:text-purple-400" />
                                 {course}
                             </li>
                         ))}

@@ -53,21 +53,21 @@ function InteractiveTerminal() {
 
     return (
         <div
-            className="bg-[#1e1e2e] rounded-xl overflow-hidden border border-[#313244] shadow-2xl w-full max-w-[480px]"
+            className="bg-[#1e1e2e] rounded-xl overflow-hidden border border-[#313244] shadow-2xl w-[320px] sm:w-[400px] md:w-[450px] lg:w-[520px] xl:w-[600px] 2xl:w-[680px]"
             onClick={() => inputRef.current?.focus()}
         >
             {/* Header */}
-            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 bg-[#181825] border-b border-[#313244]">
+            <div className="flex items-center gap-2 px-3 sm:px-4 lg:px-5 py-2 sm:py-3 bg-[#181825] border-b border-[#313244]">
                 <div className="flex gap-1.5 sm:gap-2">
-                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#f38ba8]" />
-                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#f9e2af]" />
-                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#a6e3a1]" />
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-3.5 lg:h-3.5 rounded-full bg-[#f38ba8]" />
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-3.5 lg:h-3.5 rounded-full bg-[#f9e2af]" />
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-3.5 lg:h-3.5 rounded-full bg-[#a6e3a1]" />
                 </div>
-                <span className="flex-1 text-center text-[10px] sm:text-xs text-[#6c7086] font-mono">~/ryan</span>
+                <span className="flex-1 text-center text-[10px] sm:text-xs lg:text-sm text-[#6c7086] font-mono">~/ryan</span>
             </div>
 
             {/* Content */}
-            <div ref={terminalRef} className="p-3 sm:p-4 font-mono text-xs sm:text-sm leading-relaxed h-[200px] sm:h-[280px] overflow-y-auto">
+            <div ref={terminalRef} className="p-3 sm:p-4 lg:p-5 font-mono text-xs sm:text-sm lg:text-base leading-relaxed h-[200px] sm:h-[280px] lg:h-[340px] xl:h-[380px] overflow-y-auto">
                 {history.map((item, i) => (
                     <div key={i} className="mb-2">
                         {item.type === "command" && (
@@ -117,11 +117,11 @@ export default function HeroSection() {
                 style={{ opacity, y }}
                 className="lg:sticky lg:top-0 min-h-screen flex items-center py-20 lg:py-0"
             >
-                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
-                    <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-20">
+                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 xl:gap-16">
 
                         {/* Left - Text */}
-                        <div className="flex-1 max-w-2xl text-center lg:text-left">
+                        <div className="flex-1 max-w-2xl lg:max-w-xl xl:max-w-2xl text-center lg:text-left">
                             <motion.h1
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -138,7 +138,7 @@ export default function HeroSection() {
                                 className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-500 dark:text-gray-400 mb-6 sm:mb-8 lg:mb-10 leading-relaxed"
                             >
                                 Software engineer who loves<br className="hidden sm:block" />
-                                <span className="text-emerald-500 dark:text-emerald-400 font-medium">
+                                {" "}<span className="text-emerald-500 dark:text-emerald-400 font-medium">
                                     open source
                                 </span>.
                             </motion.p>
@@ -156,7 +156,7 @@ export default function HeroSection() {
                                     View Projects
                                 </a>
                                 <a
-                                    href="https://github.com/ryanmccann1024/portfolio_website/blob/main/public/pdfs/Ryan_McCann_Resume_v4.pdf"
+                                    href="/pdfs/Ryan_McCann_Resume.pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="w-full sm:w-auto px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl text-sm sm:text-base font-semibold hover:opacity-90 transition text-center"
@@ -172,7 +172,7 @@ export default function HeroSection() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2, duration: 0.6 }}
-                            className="hidden md:block flex-shrink-0 w-full md:w-auto"
+                            className="hidden md:block flex-shrink-0"
                         >
                             <InteractiveTerminal />
                         </motion.div>

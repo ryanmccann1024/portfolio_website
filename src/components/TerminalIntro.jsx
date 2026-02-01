@@ -385,7 +385,7 @@ export default function TerminalIntro({ onComplete }) {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                            className="w-full max-w-4xl relative"
+                            className="w-full max-w-5xl xl:max-w-6xl relative"
                         >
                             <div className="bg-gray-900/95 backdrop-blur-xl rounded-xl border border-emerald-500/20 shadow-2xl shadow-emerald-900/20 overflow-hidden">
                                 {/* Title bar */}
@@ -404,7 +404,7 @@ export default function TerminalIntro({ onComplete }) {
                                 {/* Content */}
                                 <div
                                     ref={terminalRef}
-                                    className="p-5 pb-8 font-mono text-sm h-[500px] overflow-y-auto"
+                                    className="p-6 pb-8 font-mono text-sm lg:text-base h-[600px] xl:h-[650px] overflow-y-auto"
                                 >
                                     {/* Boot phase */}
                                     {phase === "boot" && (
