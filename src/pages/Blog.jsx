@@ -267,6 +267,31 @@ function getReadingTime(excerpt) {
     return Math.max(1, Math.ceil(words / 50)); // Rough estimate
 }
 
+// Image with loading skeleton
+function ImageWithSkeleton({ src, alt = "", className = "" }) {
+    const [loaded, setLoaded] = useState(false);
+    const [error, setError] = useState(false);
+
+    return (
+        <div className="relative w-full h-full">
+            {/* Skeleton loader */}
+            {!loaded && !error && (
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 dark:from-slate-700 dark:via-slate-600 dark:to-slate-700 animate-shimmer bg-[length:200%_100%]" />
+            )}
+
+            {/* Actual image */}
+            <img
+                src={src}
+                alt={alt}
+                loading="lazy"
+                onLoad={() => setLoaded(true)}
+                onError={() => setError(true)}
+                className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+            />
+        </div>
+    );
+}
+
 // Featured post card (larger, more prominent)
 function FeaturedCard({ post }) {
     const { slug, title, date, excerpt, cover, tags } = post;
@@ -286,13 +311,12 @@ function FeaturedCard({ post }) {
                     {/* Image */}
                     {cover && (
                         <div className="relative h-48 sm:h-56 lg:h-auto lg:w-1/2 xl:w-3/5 overflow-hidden">
-                            <img
+                            <ImageWithSkeleton
                                 src={cover}
                                 alt=""
-                                loading="lazy"
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent dark:from-slate-900/80 dark:via-slate-900/40 lg:bg-gradient-to-l" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent dark:from-slate-900/80 dark:via-slate-900/40 lg:bg-gradient-to-l pointer-events-none" />
 
                             {/* Featured badge */}
                             <div className="absolute top-4 left-4 px-3 py-1 bg-emerald-500/90 backdrop-blur-sm rounded-full text-xs font-semibold text-white">
@@ -380,13 +404,12 @@ function BlogCard({ post, index }) {
                 <div className="relative h-32 sm:h-40 lg:h-44 overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800">
                     {cover ? (
                         <>
-                            <img
+                            <ImageWithSkeleton
                                 src={cover}
                                 alt=""
-                                loading="lazy"
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                         </>
                     ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
