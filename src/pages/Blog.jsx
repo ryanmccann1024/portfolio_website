@@ -7,6 +7,7 @@ import { Calendar, Search, FileText, Folder, ArrowRight, Terminal, Clock, Chevro
 import { motion, AnimatePresence } from "framer-motion";
 import Spinner from "../components/Spinner";
 import { mapPage } from "../utils/mapPage";
+import { queryDatabase } from "../utils/notion";
 
 const DB = "2142d0f5c7e58041ab31e0fb965c74e5";
 
@@ -491,16 +492,11 @@ export default function Blog() {
     const [selectedTag, setSelectedTag] = useState(null);
 
     useEffect(() => {
-        fetch(`https://notion-api.splitbee.io/v1/table/${DB}`)
-            .then((r) => r.json())
-            .then((rows) =>
-                setPosts(
-                    rows
-                        .filter((r) => r.Status === "Published")
-                        .sort((a, b) => new Date(b.Date) - new Date(a.Date))
-                        .map(mapPage)
-                )
-            )
+        queryDatabase(DB, {
+            filter: { property: "Status", select: { equals: "Published" } },
+            sorts: [{ property: "Date", direction: "descending" }],
+        })
+            .then(({ results }) => setPosts(results.map(mapPage)))
             .catch(console.error)
             .finally(() => setLoading(false));
     }, []);

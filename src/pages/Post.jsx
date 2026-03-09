@@ -1,58 +1,160 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { NotionRenderer } from "react-notion-x";
 import { Calendar, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import Spinner from "../components/Spinner";
 import { mapPage } from "../utils/mapPage";
-
-import "react-notion-x/src/styles.css";
-import "prismjs/themes/prism-tomorrow.css";
+import { queryDatabase, getPageBlocks } from "../utils/notion";
 
 const DB = "2142d0f5c7e58041ab31e0fb965c74e5";
+
+// Render Notion rich-text annotations
+function RichText({ items = [] }) {
+    return items.map((t, i) => {
+        const a = t.annotations || {};
+        let el = t.plain_text;
+        if (a.code) el = <code key={i} className="px-1 py-0.5 bg-gray-100 dark:bg-slate-800 rounded text-sm font-mono">{el}</code>;
+        if (a.bold) el = <strong key={i}>{el}</strong>;
+        if (a.italic) el = <em key={i}>{el}</em>;
+        if (a.strikethrough) el = <del key={i}>{el}</del>;
+        if (a.underline) el = <span key={i} className="underline">{el}</span>;
+        if (t.href) return <a key={i} href={t.href} target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">{el}</a>;
+        return <span key={i}>{el}</span>;
+    });
+}
+
+// Group consecutive list blocks so they render inside a single <ul>/<ol>
+function groupBlocks(blocks) {
+    const groups = [];
+    let i = 0;
+    while (i < blocks.length) {
+        const type = blocks[i].type;
+        if (type === "bulleted_list_item" || type === "numbered_list_item") {
+            const items = [];
+            while (i < blocks.length && blocks[i].type === type) {
+                items.push(blocks[i]);
+                i++;
+            }
+            groups.push({ id: `group-${i}`, type: `${type}_group`, items });
+        } else {
+            groups.push(blocks[i]);
+            i++;
+        }
+    }
+    return groups;
+}
+
+function Block({ block }) {
+    const { type } = block;
+    const v = block[type] || {};
+    const rt = v.rich_text || [];
+
+    switch (type) {
+        case "paragraph":
+            return rt.length ? <p><RichText items={rt} /></p> : <br />;
+        case "heading_1":
+            return <h1><RichText items={rt} /></h1>;
+        case "heading_2":
+            return <h2><RichText items={rt} /></h2>;
+        case "heading_3":
+            return <h3><RichText items={rt} /></h3>;
+        case "bulleted_list_item_group":
+            return (
+                <ul>
+                    {block.items.map((b) => (
+                        <li key={b.id}><RichText items={b.bulleted_list_item.rich_text} /></li>
+                    ))}
+                </ul>
+            );
+        case "numbered_list_item_group":
+            return (
+                <ol>
+                    {block.items.map((b) => (
+                        <li key={b.id}><RichText items={b.numbered_list_item.rich_text} /></li>
+                    ))}
+                </ol>
+            );
+        case "to_do":
+            return (
+                <div className="flex items-start gap-2 my-1">
+                    <input type="checkbox" checked={v.checked} readOnly className="mt-1 accent-emerald-500" />
+                    <span className={v.checked ? "line-through text-gray-400" : ""}>
+                        <RichText items={rt} />
+                    </span>
+                </div>
+            );
+        case "code":
+            return (
+                <pre className="overflow-x-auto rounded-lg bg-gray-900 text-gray-100 p-4 text-sm">
+                    <code>{rt.map((t) => t.plain_text).join("")}</code>
+                </pre>
+            );
+        case "image": {
+            const src = v.type === "external" ? v.external?.url : v.file?.url;
+            const caption = v.caption?.map((t) => t.plain_text).join("") || "";
+            return (
+                <figure>
+                    <img src={src} alt={caption} className="rounded-lg w-full" />
+                    {caption && <figcaption className="text-center text-sm text-gray-500 mt-2">{caption}</figcaption>}
+                </figure>
+            );
+        }
+        case "divider":
+            return <hr />;
+        case "quote":
+            return <blockquote><RichText items={rt} /></blockquote>;
+        case "callout":
+            return (
+                <div className="flex gap-3 p-4 bg-gray-100 dark:bg-slate-800 rounded-lg my-4">
+                    {v.icon?.emoji && <span className="text-xl flex-shrink-0">{v.icon.emoji}</span>}
+                    <p className="m-0"><RichText items={rt} /></p>
+                </div>
+            );
+        default:
+            return null;
+    }
+}
+
+function BlockRenderer({ blocks }) {
+    return groupBlocks(blocks).map((block) => (
+        <Block key={block.id} block={block} />
+    ));
+}
 
 export default function Post() {
     const { slug } = useParams();
 
-    const [meta, setMeta]           = useState(null);
-    const [recordMap, setRecordMap] = useState(null);
-    const [error, setError]         = useState("");
+    const [meta, setMeta] = useState(null);
+    const [blocks, setBlocks] = useState(null);
+    const [error, setError] = useState("");
 
-    /* fetch meta + blocks */
     useEffect(() => {
         let cancelled = false;
 
         (async () => {
             try {
-                const rows = await fetch(
-                    `https://notion-api.splitbee.io/v1/table/${DB}`
-                ).then(r => r.json());
+                const { results } = await queryDatabase(DB, {
+                    filter: { property: "Status", select: { equals: "Published" } },
+                });
 
-                const row = rows.find(
-                    r => r.Slug === slug && r.Status === "Published"
-                );
-                if (!row) throw new Error("Post not found");
+                const page = results.find((p) => mapPage(p).slug === slug);
+                if (!page) throw new Error("Post not found");
 
                 if (cancelled) return;
-                setMeta(mapPage(row));
+                setMeta(mapPage(page));
 
-                const pageId = row.id.replace(/-/g, "");
-                const blocks = await fetch(
-                    `https://notion-api.splitbee.io/v1/page/${pageId}`
-                ).then(r => r.json());
-
-                if (!cancelled) setRecordMap({ block: blocks });
+                const pageBlocks = await getPageBlocks(page.id);
+                if (!cancelled) setBlocks(pageBlocks);
             } catch (e) {
                 console.error(e);
                 if (!cancelled) setError(e.message || "Failed to load post.");
             }
         })();
 
-        return () => (cancelled = true);
+        return () => { cancelled = true; };
     }, [slug]);
 
-    /* states */
     if (error)
         return (
             <div className="px-4 py-24 text-center">
@@ -63,14 +165,13 @@ export default function Post() {
             </div>
         );
 
-    if (!meta || !recordMap)
+    if (!meta || !blocks)
         return (
             <AnimatePresence>
                 <Spinner key="spinner" />
             </AnimatePresence>
         );
 
-    /* rendered post */
     return (
         <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -101,18 +202,7 @@ export default function Post() {
                 <span className="mx-1 sm:mx-2">•</span> {meta.author}
             </p>
 
-            {/* ── wrapper restored ── */}
-            <div className="notion-wrapper text-gray-800 dark:text-gray-100">
-                <NotionRenderer recordMap={recordMap} fullPage={false} />
-            </div>
-
-            {/* force light text for every nested element in dark mode */}
-            <style jsx="true">{`
-        .dark .notion-wrapper,
-        .dark .notion-wrapper * {
-          color: #f3f4f6 !important; /* Tailwind gray-100 */
-        }
-      `}</style>
+            <BlockRenderer blocks={blocks} />
         </motion.div>
     );
 }

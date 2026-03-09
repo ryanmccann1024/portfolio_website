@@ -26,6 +26,8 @@ jobs:
 
       - run: npm ci
       - run: npm run build          # outputs dist/
+        env:
+          VITE_NOTION_TOKEN: ${{ secrets.VITE_NOTION_TOKEN }}
 
       # 🆕 This step registers the build with Pages
       - uses: actions/configure-pages@v4
