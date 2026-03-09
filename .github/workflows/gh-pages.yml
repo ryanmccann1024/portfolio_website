@@ -25,9 +25,10 @@ jobs:
           node-version: 22          # any ≥ 18
 
       - run: npm ci
-      - run: npm run build          # outputs dist/
+      - run: node scripts/fetch-notion.mjs
         env:
           VITE_NOTION_TOKEN: ${{ secrets.VITE_NOTION_TOKEN }}
+      - run: npm run build          # outputs dist/
 
       # 🆕 This step registers the build with Pages
       - uses: actions/configure-pages@v4

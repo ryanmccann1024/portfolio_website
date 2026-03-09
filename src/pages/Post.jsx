@@ -4,10 +4,6 @@ import { Calendar, ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import Spinner from "../components/Spinner";
-import { mapPage } from "../utils/mapPage";
-import { queryDatabase, getPageBlocks } from "../utils/notion";
-
-const DB = "2142d0f5c7e58041ab31e0fb965c74e5";
 
 // Render Notion rich-text annotations
 function RichText({ items = [] }) {
@@ -132,25 +128,25 @@ export default function Post() {
     useEffect(() => {
         let cancelled = false;
 
-        (async () => {
-            try {
-                const { results } = await queryDatabase(DB, {
-                    filter: { property: "Status", select: { equals: "Published" } },
-                });
-
-                const page = results.find((p) => mapPage(p).slug === slug);
-                if (!page) throw new Error("Post not found");
-
+        const base = import.meta.env.BASE_URL;
+        Promise.all([
+            fetch(`${base}notion/posts.json`).then((r) => r.json()),
+            fetch(`${base}notion/posts/${slug}.json`).then((r) => {
+                if (!r.ok) throw new Error("Post not found");
+                return r.json();
+            }),
+        ])
+            .then(([posts, blocks]) => {
                 if (cancelled) return;
-                setMeta(mapPage(page));
-
-                const pageBlocks = await getPageBlocks(page.id);
-                if (!cancelled) setBlocks(pageBlocks);
-            } catch (e) {
+                const meta = posts.find((p) => p.slug === slug);
+                if (!meta) throw new Error("Post not found");
+                setMeta(meta);
+                setBlocks(blocks);
+            })
+            .catch((e) => {
                 console.error(e);
                 if (!cancelled) setError(e.message || "Failed to load post.");
-            }
-        })();
+            });
 
         return () => { cancelled = true; };
     }, [slug]);

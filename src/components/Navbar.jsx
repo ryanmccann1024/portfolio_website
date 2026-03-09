@@ -70,15 +70,6 @@ export default function Navbar() {
                             >
                                 Blog
                             </NavLink>
-                            <a
-                                href="/pdfs/Ryan_McCann_Resume.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-                            >
-                                Resume
-                            </a>
-
                             <div className="h-4 w-px bg-gray-200 dark:bg-gray-700" />
 
                             <div className="flex items-center gap-4">
@@ -185,15 +176,6 @@ export default function Navbar() {
                                 >
                                     Blog
                                 </NavLink>
-                                <a
-                                    href="/pdfs/Ryan_McCann_Resume.pdf"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
-                                >
-                                    Resume
-                                </a>
-
                                 <div className="my-3 border-t border-gray-100 dark:border-slate-800" />
 
                                 <a

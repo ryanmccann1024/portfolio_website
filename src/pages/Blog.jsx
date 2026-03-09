@@ -6,10 +6,6 @@ import { Link } from "react-router-dom";
 import { Calendar, Search, FileText, Folder, ArrowRight, Terminal, Clock, ChevronRight, ChevronDown, Filter } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Spinner from "../components/Spinner";
-import { mapPage } from "../utils/mapPage";
-import { queryDatabase } from "../utils/notion";
-
-const DB = "2142d0f5c7e58041ab31e0fb965c74e5";
 
 // Code-to-prose transformation content
 const codeSnippets = [
@@ -492,11 +488,9 @@ export default function Blog() {
     const [selectedTag, setSelectedTag] = useState(null);
 
     useEffect(() => {
-        queryDatabase(DB, {
-            filter: { property: "Status", select: { equals: "Published" } },
-            sorts: [{ property: "Date", direction: "descending" }],
-        })
-            .then(({ results }) => setPosts(results.map(mapPage)))
+        fetch(`${import.meta.env.BASE_URL}notion/posts.json`)
+            .then((r) => r.json())
+            .then(setPosts)
             .catch(console.error)
             .finally(() => setLoading(false));
     }, []);
