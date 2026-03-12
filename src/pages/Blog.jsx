@@ -264,10 +264,17 @@ function getReadingTime(excerpt) {
     return Math.max(1, Math.ceil(words / 50)); // Rough estimate
 }
 
+const BASE = import.meta.env.BASE_URL;
+function resolveImg(url) {
+    if (!url || url.startsWith("http")) return url;
+    return `${BASE}${url}`;
+}
+
 // Image with loading skeleton
 function ImageWithSkeleton({ src, alt = "", className = "" }) {
     const [loaded, setLoaded] = useState(false);
     const [error, setError] = useState(false);
+    const resolved = resolveImg(src);
 
     return (
         <div className="relative w-full h-full">
@@ -278,7 +285,7 @@ function ImageWithSkeleton({ src, alt = "", className = "" }) {
 
             {/* Actual image */}
             <img
-                src={src}
+                src={resolved}
                 alt={alt}
                 loading="lazy"
                 onLoad={() => setLoaded(true)}

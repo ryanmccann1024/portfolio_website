@@ -1,6 +1,7 @@
-// Runs at build time (Node.js) — fetches Notion data and writes static JSON
-// so the browser never needs to call the Notion API directly.
+// Runs at build time (Node.js) — fetches Notion data, downloads images locally,
+// and writes static JSON so the browser never hits expiring Notion S3 URLs.
 import { writeFileSync, mkdirSync } from "fs";
+import { extname } from "path";
 
 const TOKEN = process.env.VITE_NOTION_TOKEN;
 const DB = "2142d0f5c7e58041ab31e0fb965c74e5";
@@ -48,6 +49,30 @@ async function getPageBlocks(pageId) {
     return results;
 }
 
+// Downloads an image and saves it locally. Returns the local path on success,
+// or falls back to the original URL so the build never hard-fails.
+async function downloadImage(url, filename) {
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const buffer = Buffer.from(await res.arrayBuffer());
+        writeFileSync(`public/notion/images/${filename}`, buffer);
+        return `notion/images/${filename}`;
+    } catch (e) {
+        console.warn(`  Warning: could not download image (${filename}): ${e.message}`);
+        return url;
+    }
+}
+
+function getExt(url) {
+    try {
+        const p = new URL(url).pathname;
+        return extname(p).toLowerCase() || ".jpg";
+    } catch {
+        return ".jpg";
+    }
+}
+
 function mapPage(page) {
     const props = page.properties || {};
     const title =
@@ -74,16 +99,39 @@ function mapPage(page) {
 
 const outDir = "public/notion";
 mkdirSync(`${outDir}/posts`, { recursive: true });
+mkdirSync(`${outDir}/images`, { recursive: true });
 
 console.log("Fetching Notion posts...");
 const { results } = await queryDatabase();
-const posts = results.map(mapPage);
+
+// Map pages and download cover images in parallel
+const posts = await Promise.all(
+    results.map(async (page) => {
+        const post = mapPage(page);
+        if (post.cover && post.cover.startsWith("http")) {
+            const ext = getExt(post.cover);
+            post.cover = await downloadImage(post.cover, `${post.slug}-cover${ext}`);
+        }
+        return post;
+    })
+);
+
 writeFileSync(`${outDir}/posts.json`, JSON.stringify(posts));
 console.log(`Wrote ${posts.length} posts`);
 
 for (const page of results) {
     const { slug } = mapPage(page);
     const blocks = await getPageBlocks(page.id);
+
+    // Download inline image blocks so they don't use expiring S3 URLs
+    for (const block of blocks) {
+        if (block.type === "image" && block.image?.type === "file") {
+            const url = block.image.file.url;
+            const ext = getExt(url);
+            block.image.file.url = await downloadImage(url, `${slug}-${block.id}${ext}`);
+        }
+    }
+
     writeFileSync(`${outDir}/posts/${slug}.json`, JSON.stringify(blocks));
     console.log(`  Wrote blocks for: ${slug}`);
 }

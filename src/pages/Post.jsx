@@ -87,7 +87,9 @@ function Block({ block }) {
                 </pre>
             );
         case "image": {
-            const src = v.type === "external" ? v.external?.url : v.file?.url;
+            const raw = v.type === "external" ? v.external?.url : v.file?.url;
+            const base = import.meta.env.BASE_URL;
+            const src = raw && !raw.startsWith("http") ? `${base}${raw}` : raw;
             const caption = v.caption?.map((t) => t.plain_text).join("") || "";
             return (
                 <figure>
@@ -184,7 +186,11 @@ export default function Post() {
             </Link>
 
             {meta.cover && (
-                <img src={meta.cover} alt="" className="mb-6 sm:mb-8 w-full rounded-lg sm:rounded-xl" />
+                <img
+                    src={meta.cover.startsWith("http") ? meta.cover : `${import.meta.env.BASE_URL}${meta.cover}`}
+                    alt=""
+                    className="mb-6 sm:mb-8 w-full rounded-lg sm:rounded-xl"
+                />
             )}
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl">{meta.title}</h1>
