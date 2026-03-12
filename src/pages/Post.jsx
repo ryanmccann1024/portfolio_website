@@ -5,18 +5,33 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import Spinner from "../components/Spinner";
 
-// Render Notion rich-text annotations
+// Render Notion rich-text annotations, handling \n as <br /> so
+// Shift+Enter line breaks in Notion show up correctly.
 function RichText({ items = [] }) {
-    return items.map((t, i) => {
+    return items.flatMap((t, i) => {
         const a = t.annotations || {};
-        let el = t.plain_text;
-        if (a.code) el = <code key={i} className="px-1 py-0.5 bg-gray-100 dark:bg-slate-800 rounded text-sm font-mono">{el}</code>;
-        if (a.bold) el = <strong key={i}>{el}</strong>;
-        if (a.italic) el = <em key={i}>{el}</em>;
-        if (a.strikethrough) el = <del key={i}>{el}</del>;
-        if (a.underline) el = <span key={i} className="underline">{el}</span>;
-        if (t.href) return <a key={i} href={t.href} target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">{el}</a>;
-        return <span key={i}>{el}</span>;
+        const parts = t.plain_text.split("\n");
+
+        return parts.reduce((acc, part, j) => {
+            if (j > 0) acc.push(<br key={`${i}-${j}-br`} />);
+            if (!part) return acc;
+
+            let el = part;
+            if (a.code) {
+                acc.push(<code key={`${i}-${j}`} className="px-1 py-0.5 bg-gray-100 dark:bg-slate-800 rounded text-sm font-mono">{el}</code>);
+                return acc;
+            }
+            if (a.bold) el = <strong key={`${i}-${j}-b`}>{el}</strong>;
+            if (a.italic) el = <em key={`${i}-${j}-i`}>{el}</em>;
+            if (a.strikethrough) el = <del key={`${i}-${j}-s`}>{el}</del>;
+            if (a.underline) el = <span key={`${i}-${j}-u`} className="underline">{el}</span>;
+            if (t.href) {
+                acc.push(<a key={`${i}-${j}`} href={t.href} target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">{el}</a>);
+            } else {
+                acc.push(<span key={`${i}-${j}`}>{el}</span>);
+            }
+            return acc;
+        }, []);
     });
 }
 

@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
   schedule:
-    - cron: '*/20 * * * *'   # re-sync Notion every 20 minutes
+    - cron: '0 6 * * 1'   # re-sync Notion every Monday at 6am UTC
 
 permissions:
   contents: read
