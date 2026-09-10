@@ -4,24 +4,18 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
 
-// Apple-style scroll-progress-based fade in
-// Animates based on scroll position, not just entering viewport
+// Fade + rise once the element scrolls into view.
+// Entry-triggered for the same reason as ScrollStagger below.
 export function ScrollFadeIn({ children, className = "", yOffset = 60 }) {
     const ref = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start end", "center center"],
-    });
-
-    const opacity = useTransform(scrollYProgress, [0, 0.6, 1], [0, 0.8, 1]);
-    const y = useTransform(scrollYProgress, [0, 1], [yOffset, 0]);
-    const smoothY = useSpring(y, { stiffness: 100, damping: 30 });
-    const smoothOpacity = useSpring(opacity, { stiffness: 100, damping: 30 });
+    const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
 
     return (
         <motion.div
             ref={ref}
-            style={{ opacity: smoothOpacity, y: smoothY }}
+            initial={{ opacity: 0, y: yOffset }}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: yOffset }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className={className}
         >
             {children}
@@ -29,90 +23,64 @@ export function ScrollFadeIn({ children, className = "", yOffset = 60 }) {
     );
 }
 
-// Apple-style scroll-progress text reveal (word by word)
+// Word-by-word heading reveal, triggered once the heading scrolls into view.
+// Entry-triggered for the same reason as ScrollStagger below.
 export function ScrollTextReveal({ text, className = "" }) {
     const ref = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start end", "center center"],
-    });
-
+    const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
     const words = text.split(" ");
 
     return (
         <span ref={ref} className={className}>
-            {words.map((word, i) => {
-                const start = i / words.length;
-                const end = (i + 1) / words.length;
-                return (
-                    <ScrollWord
-                        key={i}
-                        progress={scrollYProgress}
-                        range={[start * 0.8, Math.min(end * 0.8 + 0.2, 1)]}
-                    >
-                        {word}
-                    </ScrollWord>
-                );
-            })}
+            {words.map((word, i) => (
+                <motion.span
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    transition={{
+                        duration: 0.6,
+                        delay: i * 0.08,
+                        ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="inline-block mr-[0.25em]"
+                >
+                    {word}
+                </motion.span>
+            ))}
         </span>
     );
 }
 
-function ScrollWord({ children, progress, range }) {
-    const opacity = useTransform(progress, range, [0, 1]);
-    const y = useTransform(progress, range, [20, 0]);
-
-    return (
-        <motion.span
-            style={{ opacity, y }}
-            className="inline-block mr-[0.25em]"
-        >
-            {children}
-        </motion.span>
-    );
-}
-
-// Apple-style stagger based on scroll progress
+// Staggered reveal, triggered once the group scrolls into view.
+//
+// This used to be scrubbed off scroll progress, but a scroll-linked range can
+// only complete if the page has enough room left to scroll - the last section
+// before the footer never got there, so its final card stayed faded and
+// offset. Triggering on entry instead always finishes.
 export function ScrollStagger({ children, className = "" }) {
     const ref = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start end", "center center"],
-    });
-
-    const childCount = Array.isArray(children) ? children.length : 1;
+    const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
 
     return (
         <div ref={ref} className={className}>
             {Array.isArray(children)
-                ? children.map((child, i) => {
-                      const start = (i / childCount) * 0.5;
-                      const end = start + 0.5;
-                      return (
-                          <ScrollStaggerItem
-                              key={i}
-                              progress={scrollYProgress}
-                              range={[start, end]}
-                          >
-                              {child}
-                          </ScrollStaggerItem>
-                      );
-                  })
+                ? children.map((child, i) => (
+                      <motion.div
+                          key={i}
+                          initial={{ opacity: 0, y: 40 }}
+                          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+                          transition={{
+                              duration: 0.7,
+                              delay: i * 0.1,
+                              ease: [0.16, 1, 0.3, 1],
+                          }}
+                          className="h-full"
+                      >
+                          {child}
+                      </motion.div>
+                  ))
                 : children}
         </div>
-    );
-}
-
-function ScrollStaggerItem({ children, progress, range }) {
-    const opacity = useTransform(progress, range, [0, 1]);
-    const y = useTransform(progress, range, [40, 0]);
-    const smoothY = useSpring(y, { stiffness: 100, damping: 30 });
-    const smoothOpacity = useSpring(opacity, { stiffness: 100, damping: 30 });
-
-    return (
-        <motion.div style={{ opacity: smoothOpacity, y: smoothY }} className="h-full">
-            {children}
-        </motion.div>
     );
 }
 

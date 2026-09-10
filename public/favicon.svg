@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="RM">
+  <defs>
+    <linearGradient id="rm-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="55%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="116" ry="116" fill="url(#rm-bg)"/>
+
+  <g fill="none" stroke="#ffffff" stroke-width="38" stroke-linecap="round" stroke-linejoin="round">
+    <!-- R -->
+    <path d="M108 348 L108 164 L172 164 A54 54 0 0 1 172 272 L108 272"/>
+    <path d="M158 272 L212 348"/>
+    <!-- M -->
+    <path d="M268 348 L268 164 L336 282 L404 164 L404 348"/>
+  </g>
+</svg>

@@ -4,10 +4,9 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Moon, Sun, Github, Linkedin, Mail } from "lucide-react";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
-    const location = useLocation();
     const { scrollY } = useScroll();
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
@@ -58,20 +57,6 @@ export default function Navbar() {
 
                         {/* Desktop nav */}
                         <div className="hidden md:flex items-center gap-8">
-                            <NavLink
-                                to="/blog"
-                                className={({ isActive }) =>
-                                    `text-sm font-medium transition-colors ${
-                                        isActive
-                                            ? "text-gray-900 dark:text-white"
-                                            : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                                    }`
-                                }
-                            >
-                                Blog
-                            </NavLink>
-                            <div className="h-4 w-px bg-gray-200 dark:bg-gray-700" />
-
                             <div className="flex items-center gap-4">
                                 <a
                                     href="https://github.com/ryanmccann1024"
@@ -163,21 +148,6 @@ export default function Navbar() {
                                 </button>
                             </div>
                             <nav className="p-4 space-y-1">
-                                <NavLink
-                                    to="/blog"
-                                    onClick={close}
-                                    className={({ isActive }) =>
-                                        `block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                                            isActive
-                                                ? "bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white"
-                                                : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800"
-                                        }`
-                                    }
-                                >
-                                    Blog
-                                </NavLink>
-                                <div className="my-3 border-t border-gray-100 dark:border-slate-800" />
-
                                 <a
                                     href="https://github.com/ryanmccann1024"
                                     target="_blank"

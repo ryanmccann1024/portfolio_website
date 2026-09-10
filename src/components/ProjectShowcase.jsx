@@ -3,14 +3,45 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Github } from "lucide-react";
+import { Github, ExternalLink } from "lucide-react";
 import DepthCard from "./DepthCard";
 import { ScrollFadeIn, ScrollTextReveal, ScrollStagger, TiltOnScroll } from "./ScrollAnimations";
 import fusionImg from "../assets/projects/fusion.png";
 import podmanImg from "../assets/projects/podman.png";
-import reactImg from "../assets/projects/react.png";
+import submitcueImg from "../assets/projects/submitcue.png";
 
 const projects = [
+    {
+        id: "submitcue",
+        title: "SubmitCue",
+        subtitle: "Research Decision-Support for Academics",
+        description: "Evaluates research ideas, papers, and proposals against 320M+ published works \u2014 surfacing overlaps, evidence gaps, and venue fit with traceable citations.",
+        image: submitcueImg,
+        domain: "submitcue.com",
+        color: "blue",
+        tech: ["Next.js", "TypeScript", "OpenAlex", "LLM APIs", "MCP"],
+        stats: [
+            { label: "Papers Indexed", value: "320M+" },
+            { label: "Research Tools", value: "8" },
+            { label: "Integrations", value: "10+" },
+        ],
+        status: "early access",
+        links: {
+            live: "https://submitcue.com",
+        },
+        fullStory: {
+            problem: "Researchers spend weeks manually reading literature to answer one question: has this already been done, and does it matter? Existing search tools return papers, not judgments \u2014 leaving novelty, positioning, and venue fit to guesswork right up until a rejection letter arrives.",
+            solution: "Built a decision-support layer over the literature. Drop in an idea, abstract, or full manuscript and SubmitCue maps the surrounding research landscape, finds the closest analogs, flags overlaps and unsupported claims, and recommends where the work actually fits \u2014 every conclusion traceable back to a cited source.",
+            impact: [
+                "Grounded in OpenAlex: 320M+ published papers",
+                "Eight tools spanning gap-finding, positioning, review, and venue fit",
+                "Verified against OpenReview reviews for supported venues",
+                "Plugs into Zotero, Mendeley, Overleaf, Word, and Google Docs",
+                "Exposed to Claude, ChatGPT, and Cursor over MCP and a public API",
+            ],
+            technical: "Next.js and TypeScript front end over an OpenAlex-backed literature index, with LLM-driven analysis pipelines. Ships an MCP server and REST API so AI agents can call the same tools the web app uses.",
+        },
+    },
     {
         id: "fusion",
         title: "FUSION",
@@ -68,38 +99,9 @@ const projects = [
             technical: "Go implementation, Linux tracing and debugging, hyperfine benchmarking, cross-platform CI validation.",
         },
     },
-    {
-        id: "portfolio",
-        title: "This Portfolio",
-        subtitle: "React + Notion CMS",
-        description: "Built with React, Tailwind, and Framer Motion. Blog syncs from Notion API with full dark mode support.",
-        image: reactImg,
-        color: "green",
-        tech: ["React", "Tailwind", "Framer Motion"],
-        stats: [
-            { label: "Lighthouse", value: "95+" },
-            { label: "Dark Mode", value: "Yes" },
-            { label: "CMS", value: "Notion" },
-        ],
-        status: "launched",
-        links: {
-            github: "https://github.com/ryanmccann1024/portfolio_website",
-            live: "/",
-        },
-        fullStory: {
-            problem: "Needed a portfolio that showcases technical skills while being easy to update with blog content.",
-            solution: "React SPA with Notion as a headless CMS for the blog, Framer Motion for scroll animations, and a terminal-inspired design.",
-            impact: [
-                "Blog posts sync instantly from Notion",
-                "Full dark mode support",
-                "95+ Lighthouse scores across the board",
-            ],
-            technical: "Vite for builds, react-notion-x for rendering, Apple-style scroll animations with Framer Motion.",
-        },
-    },
 ];
 
-function BrowserMockup({ image, title, isHovered }) {
+function BrowserMockup({ image, title, domain, isHovered }) {
     return (
         <div className="relative rounded-lg overflow-hidden bg-slate-900 shadow-2xl">
             {/* Browser chrome */}
@@ -111,7 +113,7 @@ function BrowserMockup({ image, title, isHovered }) {
                 </div>
                 <div className="flex-1 mx-2">
                     <div className="bg-slate-700 rounded px-3 py-1 text-xs text-gray-400 font-mono truncate">
-                        {title.toLowerCase().replace(/\s+/g, "-")}.dev
+                        {domain || `${title.toLowerCase().replace(/\s+/g, "-")}.dev`}
                     </div>
                 </div>
             </div>
@@ -132,26 +134,47 @@ function BrowserMockup({ image, title, isHovered }) {
     );
 }
 
+// Sections inside an opened project cascade in just behind the modal itself
+const modalStagger = {
+    hidden: {},
+    visible: { transition: { delayChildren: 0.18, staggerChildren: 0.07 } },
+};
+
+const modalSection = {
+    hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
+    visible: {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    },
+};
+
 function ExpandedProjectContent({ project }) {
     return (
-        <div className="p-5 sm:p-6 md:p-10">
+        <motion.div
+            variants={modalStagger}
+            initial="hidden"
+            animate="visible"
+            className="p-5 sm:p-6 md:p-10"
+        >
             {/* Header - centered */}
-            <div className="mb-6 sm:mb-8 text-center">
+            <motion.div variants={modalSection} className="mb-6 sm:mb-8 text-center">
                 <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-1 sm:mb-2">
                     {project.subtitle}
                 </p>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white font-display">
                     {project.title}
                 </h2>
-            </div>
+            </motion.div>
 
             {/* Screenshot */}
-            <div className="mb-6 sm:mb-8">
-                <BrowserMockup image={project.image} title={project.title} isHovered={false} />
-            </div>
+            <motion.div variants={modalSection} className="mb-6 sm:mb-8">
+                <BrowserMockup image={project.image} title={project.title} domain={project.domain} isHovered={false} />
+            </motion.div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8 p-3 sm:p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl">
+            <motion.div variants={modalSection} className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8 p-3 sm:p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl">
                 {project.stats.map((stat) => (
                     <div key={stat.label} className="text-center">
                         <div className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white">
@@ -162,10 +185,10 @@ function ExpandedProjectContent({ project }) {
                         </div>
                     </div>
                 ))}
-            </div>
+            </motion.div>
 
             {/* Problem & Solution */}
-            <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
+            <motion.div variants={modalSection} className="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
                 <div>
                     <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide mb-1 sm:mb-2">
                         Problem
@@ -182,10 +205,10 @@ function ExpandedProjectContent({ project }) {
                         {project.fullStory.solution}
                     </p>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Impact */}
-            <div className="mb-6 sm:mb-8">
+            <motion.div variants={modalSection} className="mb-6 sm:mb-8">
                 <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide mb-2 sm:mb-3">
                     Impact
                 </h3>
@@ -197,10 +220,10 @@ function ExpandedProjectContent({ project }) {
                         </li>
                     ))}
                 </ul>
-            </div>
+            </motion.div>
 
             {/* Tech + Links row */}
-            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-4 pt-4 sm:pt-6 border-t border-gray-100 dark:border-slate-800">
+            <motion.div variants={modalSection} className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-4 pt-4 sm:pt-6 border-t border-gray-100 dark:border-slate-800">
                 <div className="flex flex-wrap gap-2">
                     {project.tech.map((t) => (
                         <span
@@ -211,17 +234,32 @@ function ExpandedProjectContent({ project }) {
                         </span>
                     ))}
                 </div>
-                <a
-                    href={project.links.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-opacity"
-                >
-                    <Github size={14} className="sm:w-4 sm:h-4" />
-                    GitHub
-                </a>
-            </div>
-        </div>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                    {project.links.live && project.links.live.startsWith("http") && (
+                        <a
+                            href={project.links.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full text-xs sm:text-sm font-medium hover:opacity-90 transition-opacity"
+                        >
+                            <ExternalLink size={14} className="sm:w-4 sm:h-4" />
+                            Visit site
+                        </a>
+                    )}
+                    {project.links.github && (
+                        <a
+                            href={project.links.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-opacity hover:opacity-90 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white"
+                        >
+                            <Github size={14} className="sm:w-4 sm:h-4" />
+                            GitHub
+                        </a>
+                    )}
+                </div>
+            </motion.div>
+        </motion.div>
     );
 }
 
@@ -235,7 +273,7 @@ export function ProjectCard({ project, index }) {
             <div className="p-4 sm:p-5 lg:p-6 h-full flex flex-col">
                 {/* Browser mockup */}
                 <div className="mb-3 sm:mb-4">
-                    <BrowserMockup image={project.image} title={project.title} />
+                    <BrowserMockup image={project.image} title={project.title} domain={project.domain} />
                 </div>
 
                 {/* Title and subtitle */}

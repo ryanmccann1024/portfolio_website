@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import {
     Search,
     Home,
-    FileText,
     Briefcase,
     GraduationCap,
     Mail,
@@ -21,7 +20,6 @@ import {
 
 const commands = [
     { id: "home", label: "Go Home", icon: Home, action: "navigate", path: "/" },
-    { id: "blog", label: "Read Blog", icon: FileText, action: "navigate", path: "/blog" },
     { id: "projects", label: "View Projects", icon: Briefcase, action: "scroll", target: "#projects" },
     { id: "resume", label: "Download Resume", icon: Download, action: "link", url: "/pdfs/Ryan_McCann_Resume.pdf" },
     { id: "github", label: "Open GitHub", icon: Github, action: "link", url: "https://github.com/ryanmccann1024" },

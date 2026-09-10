@@ -12,8 +12,6 @@ import { AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import Blog from "./pages/Blog";
-import Post from "./pages/Post";
 import CustomCursor from "./components/CustomCursor";
 import CommandPalette from "./components/CommandPalette";
 import NoiseOverlay from "./components/NoiseOverlay";
@@ -47,8 +45,6 @@ function AnimatedRoutes() {
             <PageTransition key={location.pathname}>
                 <Routes location={location}>
                     <Route path="/" element={<Home />} />
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="/blog/:slug" element={<Post />} />
                 </Routes>
             </PageTransition>
         </AnimatePresence>

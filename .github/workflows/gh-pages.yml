@@ -4,8 +4,6 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
-  schedule:
-    - cron: '0 6 * * 1'   # re-sync Notion every Monday at 6am UTC
 
 permissions:
   contents: read
@@ -27,9 +25,6 @@ jobs:
           node-version: 22          # any ≥ 18
 
       - run: npm ci
-      - run: node scripts/fetch-notion.mjs
-        env:
-          VITE_NOTION_TOKEN: ${{ secrets.VITE_NOTION_TOKEN }}
       - run: npm run build          # outputs dist/
 
       # 🆕 This step registers the build with Pages

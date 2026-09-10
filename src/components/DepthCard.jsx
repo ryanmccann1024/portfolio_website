@@ -1,7 +1,7 @@
 // src/components/DepthCard.jsx
 // 3D depth card with parallax layers and expand-to-detail functionality
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 
@@ -121,6 +121,25 @@ export default function DepthCard({
 }
 
 function ExpandedView({ isOpen, onClose, children }) {
+    const scrollRef = useRef(null);
+    const [atTop, setAtTop] = useState(true);
+    const [atBottom, setAtBottom] = useState(true);
+
+    const updateEdges = useCallback(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+        const { scrollTop, scrollHeight, clientHeight } = el;
+        setAtTop(scrollTop <= 2);
+        setAtBottom(scrollTop + clientHeight >= scrollHeight - 2);
+    }, []);
+
+    // Measure once the modal has mounted so the initial edges are right
+    useEffect(() => {
+        if (!isOpen) return;
+        const id = requestAnimationFrame(updateEdges);
+        return () => cancelAnimationFrame(id);
+    }, [isOpen, updateEdges]);
+
     // Prevent body scroll when modal is open & handle Escape key
     useEffect(() => {
         if (isOpen) {
@@ -164,10 +183,10 @@ function ExpandedView({ isOpen, onClose, children }) {
 
                     {/* Modal container with gradient border */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.98, y: 10 }}
-                        transition={{ duration: 0.35, ease: smoothEasing }}
+                        initial={{ opacity: 0, scale: 0.94, y: 24, filter: "blur(6px)" }}
+                        animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, scale: 0.96, y: 12, filter: "blur(4px)" }}
+                        transition={{ duration: 0.4, ease: smoothEasing }}
                         onClick={(e) => e.stopPropagation()}
                         className="relative w-full max-w-3xl"
                     >
@@ -194,16 +213,36 @@ function ExpandedView({ isOpen, onClose, children }) {
                                 </svg>
                             </motion.button>
 
-                            {/* Scrollable content with fade edges */}
-                            <div className="max-h-[85vh] modal-scroll">
+                            {/* Scrollable content - scrollbar is hidden, so a soft
+                                fade at each edge is what signals "there's more" */}
+                            <div
+                                ref={scrollRef}
+                                onScroll={updateEdges}
+                                className="max-h-[85vh] modal-scroll"
+                            >
                                 <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
+                                    initial={{ opacity: 0, y: 12 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.1, duration: 0.3, ease: smoothEasing }}
+                                    exit={{ opacity: 0, y: 6 }}
+                                    transition={{ delay: 0.12, duration: 0.35, ease: smoothEasing }}
                                 >
                                     {children}
                                 </motion.div>
                             </div>
+
+                            {/* Fade edges */}
+                            <motion.div
+                                aria-hidden
+                                animate={{ opacity: atTop ? 0 : 1 }}
+                                transition={{ duration: 0.25, ease: "easeOut" }}
+                                className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-white dark:from-slate-900 to-transparent"
+                            />
+                            <motion.div
+                                aria-hidden
+                                animate={{ opacity: atBottom ? 0 : 1 }}
+                                transition={{ duration: 0.25, ease: "easeOut" }}
+                                className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-white dark:from-slate-900 to-transparent"
+                            />
                         </div>
                     </motion.div>
                 </motion.div>

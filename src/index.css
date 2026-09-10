@@ -407,42 +407,18 @@ html {
 }
 
 /* Modal scrollbar - thin and elegant */
+/* Modal scroll area - scrollbar fully hidden, a fade edge hints at more content */
 .modal-scroll {
     overflow-y: auto;
     overscroll-behavior: contain;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(156, 163, 175, 0.4) transparent;
-}
-
-.dark .modal-scroll {
-    scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
+    scrollbar-width: none;          /* Firefox */
+    -ms-overflow-style: none;       /* legacy Edge */
 }
 
 .modal-scroll::-webkit-scrollbar {
-    width: 6px;
-}
-
-.modal-scroll::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 8px 0;
-}
-
-.modal-scroll::-webkit-scrollbar-thumb {
-    background: rgba(156, 163, 175, 0.4);
-    border-radius: 3px;
-    transition: background 0.2s ease;
-}
-
-.dark .modal-scroll::-webkit-scrollbar-thumb {
-    background: rgba(100, 116, 139, 0.5);
-}
-
-.modal-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(156, 163, 175, 0.6);
-}
-
-.dark .modal-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(100, 116, 139, 0.7);
+    width: 0;
+    height: 0;
+    display: none;                  /* WebKit */
 }
 
 /* Focus visible styling */
